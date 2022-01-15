@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{xurl}
+\title{Relatório 1 \\ Pré-processamento}
+\author{Pedro A. S. O. Neto}
+\date{Janeiro 2022}
+
+\begin{document}
+
+\maketitle
+
+\section{Definições do Tobii}
+\subsection{Definições do Tobi}
+
+\textbf{Fixação:} Fixations can be defined as the periods of time where the eyes are relatively still, holding the central foveal vision in place so that the visual system can take in detailed information about what is being looked at.
+
+\textbf{Sacadas} Saccades are the type of eye movement used to move the fovea rapidly from one point to another. 
+
+\section{Como são determinadas sacadas e fixações}
+
+O algoritmo I-VT (Velocity Threshold Identification) identifica a velocidade da movimentação angular do olho e, caso essa velocidade ultrapace um certo limiar, o evento é classificado como sacada. Caso contrário, o evento é classificado como fixação.
+
+Ainda, para ser classificado como fixação, a posição de foco dos olhos deve estar dentro de um limiar pre-determinado.
+
+\section{Escolhas de processamento}
+
+\subsection{Interpolation}
+Dados faltantes são interpolados, desde que o numero de eventos nao ultrapasse 75ms.
+
+\subsection{Noise reduction}
+
+Podemos passar uma média ou uma mediana móvel para reduzir o "noise" dos dados. Neste caso, algumas coisas devem ser consideradas:
+\begin{itemize}
+  \item Quanto maior o tamanho da janela (window), maior é o noise. 
+  \item Janelas maiores resultam sacadas mais longas, e fixações menores. Isso porque uma sacada aumenta a velocidade de toda a janela, que agora será classificada como uma grande sacada, ao inves de uma fixação, uma pequena sacada, e outra fixação.
+\end{itemize}
+
+\section{Considerações finais e conclusões}
+Todo o processo de pre-processamento realizado pelo Tobii está bem-descrito, e pode ser manipulado no momento de extração dos dados.
+Os parâmetros pré-definidos são baseados em revisões bibliográficas. Por exemplo:. Na minha opinião, devemos manter as configurações padrão do software.
+
+Por outro lado, os dados extraídos são resultado de uma série de escolhas de pre-processamento dos dados. Caso seja identificado que algum parâmetro resulta em muitas sacadas e/ou fixações arbitrariamente pequenas (i.e., muito próximas em tempo e espaço), nós podemos aplicar nossos próprios critérios de pos-processamento. Ex.: Unir fixações que estão separadas por sacada, porém indicam foco em alguma região de interesse do experimento.
+
+\section{Próximos passos}
+
+1) Verificar se blink duration e speed of saccade, é igual para adultos e crianças (default do Tobii é para adultos); 2) Verificar smoothing algorithms em outros estudos. Média ou mediana?
+
+\section{Perguntas}
+
+Qual olho principal está sendo determinado na hora das coletas?
+Qual o sampling rate determinado na coleta?
+
+\section{Referencia}
+\begin{itemize}
+  \item \url{https://www.tobiipro.com/siteassets/tobii-pro/learn-and-support/analyze/how-do-we-classify-eye-movements/tobii-pro-i-vt-fixation-filter.pdf/?v=2012}
+  \item \url{https://www.tobiipro.com/learn-and-support/learn/steps-in-an-eye-tracking-study/data/}
+\end{itemize}
+
+
+\end{document}
+
+
