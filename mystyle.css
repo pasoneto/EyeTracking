@@ -1,0 +1,25 @@
+body {
+  background-color: lightgray;
+}
+
+h1 {
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+}
+h2 {
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+}
+ul {
+  list-style-type: upper-roman;
+  padding: 10px;
+  margin-left: 35px;
+  margin-top: 10px;
+  margin-bottom: 1em; 
+}
+li { 
+  margin-bottom: 1em; 
+}
+

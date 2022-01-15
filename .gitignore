@@ -1,0 +1,8 @@
+*.csv
+*.aux
+*.fdb_latexmk
+*.out
+*.fls
+*.synctex.gz
+*.mp4
+
