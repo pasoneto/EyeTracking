@@ -27,22 +27,22 @@ for(i in trials){
 }
 
 #Baseline
-cinco %<>%
+um %<>%
   filter(Presented.Stimulus.name != "Eyetracker Calibration") %>% ##Removendo partes de calibração
   filter(Presented.Stimulus.name %in% trials) %>% #Selecionando video 
-  select("Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", colunas) %>%
-  melt(id.vars = c("Recording.timestamp", "Gaze.event.duration", "Presented.Stimulus.name", "Eye.movement.type")) %>%
+  select("Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", colunas) %>%
+  melt(id.vars = c("Computer.timestamp", "Recording.timestamp", "Gaze.event.duration", "Presented.Stimulus.name", "Eye.movement.type")) %>%
   group_by(Presented.Stimulus.name) %>%
   mutate(Recording.timestamp = Recording.timestamp - min(Recording.timestamp))
 
-cinco %<>%
-  arrange(Presented.Stimulus.name, Recording.timestamp) %>%
-  group_by(Presented.Stimulus.name, Recording.timestamp) %>%
+um %<>%
+  arrange(Computer.timestamp) %>%
+  ungroup() %>%
   filter(value == 1) %>%
-  ungroup() %>% 
-  group_by(Presented.Stimulus.name) %>%
+  mutate(trialIndex = fixationIndexer(Presented.Stimulus.name)) %>%
+  group_by(Presented.Stimulus.name, trialIndex) %>%
   mutate(fixationIndex = fixationIndexer(variable)) %>%
-  group_by(Presented.Stimulus.name, fixationIndex) %>%
+  group_by(Presented.Stimulus.name, fixationIndex, trialIndex) %>%
   summarise(Presented.Stimulus.name = unique(Presented.Stimulus.name),
             variable = unique(variable),
             eventStart = min(Recording.timestamp)/1000,
@@ -51,16 +51,20 @@ cinco %<>%
   #group_by(Presented.Stimulus.name) %>%
   #mutate(TimeTonextFixation = nextFixationCalc(eventEnd, eventStart))
 
-names = cinco$variable
+names = um$variable
 subs = c("AOI.hit", trials, ".")
 for(i in subs){
   names = str_replace(names, i, "")
 }
-cinco$variable = names
+names = str_replace(names, "Rosto", "R")
+names = str_replace(names, "Brinquedo", "B")
+names = str_replace(names, "Esquerda", "E")
+names = str_replace(names, "Direita", "D")
+um$variable = names
 
-cinco %>%
+um %>%
   ggplot(aes(y = variable, x = 0, color = variable))+
-    facet_wrap(~Presented.Stimulus.name, scale = "free")+
+    facet_wrap(~Presented.Stimulus.name+trialIndex, scale = "free")+
     geom_errorbar(aes(xmin =eventStart, xmax = eventEnd), width = 0, size = 3)+
     theme(legend.position = "None",
           strip.text.y = element_blank()) +
