@@ -32,25 +32,32 @@ um %<>%
   filter(Presented.Stimulus.name %in% trials) %>% #Selecionando video 
   select("Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", colunas) %>%
   melt(id.vars = c("Computer.timestamp", "Recording.timestamp", "Gaze.event.duration", "Presented.Stimulus.name", "Eye.movement.type")) %>%
-  group_by(Presented.Stimulus.name) %>%
-  mutate(Recording.timestamp = Recording.timestamp - min(Recording.timestamp))
-
-um %<>%
+  filter(!is.na(value)) %>%
   arrange(Computer.timestamp) %>%
   ungroup() %>%
-  filter(value == 1) %>%
   mutate(trialIndex = fixationIndexer(Presented.Stimulus.name)) %>%
   group_by(Presented.Stimulus.name, trialIndex) %>%
-  mutate(fixationIndex = fixationIndexer(variable)) %>%
-  group_by(Presented.Stimulus.name, fixationIndex, trialIndex) %>%
+  mutate(Recording.timestamp = Recording.timestamp - min(Recording.timestamp)) %>%
+  arrange(variable, Recording.timestamp, Computer.timestamp)
+
+#Calculate trial index!
+um %<>%
+  group_by(Presented.Stimulus.name, variable) %>%
+  mutate(fixationIndex = fixationIndexer(value)) %>%
+  filter(value == 1) %>%
+  arrange(Presented.Stimulus.name, Recording.timestamp) %>%
+  ungroup() %>%
+  group_by(fixationIndex, trialIndex, variable) %>%
   summarise(Presented.Stimulus.name = unique(Presented.Stimulus.name),
             variable = unique(variable),
             eventStart = min(Recording.timestamp)/1000,
             eventEnd = (max(Recording.timestamp)+8)/1000,
-            fixationDuration = sum(Gaze.event.duration))
+            fixationDuration = sum(Gaze.event.duration)) %>%
+  ungroup() %>%
+  arrange(Presented.Stimulus.name, eventStart, trialIndex)
+
   #group_by(Presented.Stimulus.name) %>%
   #mutate(TimeTonextFixation = nextFixationCalc(eventEnd, eventStart))
-
 names = um$variable
 subs = c("AOI.hit", trials, ".")
 for(i in subs){
@@ -65,7 +72,7 @@ um$variable = names
 um %>%
   ggplot(aes(y = variable, x = 0, color = variable))+
     facet_wrap(~Presented.Stimulus.name+trialIndex, scale = "free")+
-    geom_errorbar(aes(xmin =eventStart, xmax = eventEnd), width = 0, size = 3)+
+    geom_errorbar(aes(xmin = eventStart, xmax = eventEnd), width = 0, size = 3)+
     theme(legend.position = "None",
           strip.text.y = element_blank()) +
     ylab("Stimulus focused")+
