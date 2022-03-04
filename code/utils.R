@@ -31,7 +31,6 @@ fixationIndexer = function(x){
 
 #Complete dataprocessing
 visualizer = function(data){
-
   #Selecting columns of interest by trial type
   trials = c("IJA_A3_B1_D","IJA_A1_B2_E","RJA_A2_B1_E","RJA_A1_B2_D","RJA_A2_B2_E","IJA_A1_B1_D","IJA_A3_B1_E","RJA_A2_B1_D","IJA_A1_B1_E")
   colunas = c()
@@ -44,6 +43,7 @@ visualizer = function(data){
 
   #Filtering, computing trial index
   data %<>%
+    #filter(Eye.movement.type == "fixation") %>% ##Removendo partes de calibração
     filter(Presented.Stimulus.name != "Eyetracker Calibration") %>% ##Removendo partes de calibração
     filter(Presented.Stimulus.name %in% trials) %>% #Selecionando video 
     select("Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", colunas) %>%
