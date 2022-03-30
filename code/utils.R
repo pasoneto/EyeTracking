@@ -2,6 +2,7 @@ library("dplyr")
 library("data.table")
 library("ggplot2")
 source("/Users/pdealcan/Documents/github/doc_suomi/code/utils.R")
+library("stringi")
 
 #Computes fixation index. Input must be ordered by time
 fixationIndexer = function(x){
@@ -91,4 +92,6 @@ visualizer = function(data){
               strip.text.y = element_blank()) +
         ylab("Stimulus focused")+
         xlab("Elapsed time (ms)")
+
+     return(data) 
 }
