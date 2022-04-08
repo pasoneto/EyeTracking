@@ -10,8 +10,7 @@ fixationIndexer = function(x){
   indexes = c()
   for(i in 1:(length(x))){
     if(i == length(x)){
-      if(x[i] == x[i-1]){
-        indexes = c(indexes, count)
+      if(x[i] == x[i-1]){ indexes = c(indexes, count)
       } else{
         count = count+1
         indexes = c(indexes, count)
@@ -31,7 +30,7 @@ fixationIndexer = function(x){
 }
 
 #Complete dataprocessing
-visualizer = function(data){
+visualizer = function(data, plot = TRUE){
   #Selecting columns of interest by trial type
   trials = c("IJA_A3_B1_D","IJA_A1_B2_E","RJA_A2_B1_E","RJA_A1_B2_D","RJA_A2_B2_E","IJA_A1_B1_D","IJA_A3_B1_E","RJA_A2_B1_D","IJA_A1_B1_E")
   colunas = c()
@@ -44,7 +43,6 @@ visualizer = function(data){
 
   #Filtering, computing trial index
   data %<>%
-    #filter(Eye.movement.type == "fixation") %>% ##Removendo partes de calibração
     filter(Presented.Stimulus.name != "Eyetracker Calibration") %>% ##Removendo partes de calibração
     filter(Presented.Stimulus.name %in% trials) %>% #Selecionando video 
     select("Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", colunas) %>%
@@ -54,24 +52,24 @@ visualizer = function(data){
     ungroup() %>%
     mutate(trialIndex = fixationIndexer(Presented.Stimulus.name)) %>%
     group_by(Presented.Stimulus.name, trialIndex) %>%
-    mutate(Recording.timestamp = Recording.timestamp - min(Recording.timestamp)) %>%
-    arrange(variable, Recording.timestamp, Computer.timestamp)
 
-  #Computing fixation index and summarising fixation timings
-  data %<>%
+    #Converting time to seconds. First from microseconds, then from miliseconds
+    mutate(Recording.timestamp = (Recording.timestamp - min(Recording.timestamp))/1000000,
+           Gaze.event.duration = Gaze.event.duration/1000) %>%
+    arrange(trialIndex, Recording.timestamp) %>%
     group_by(Presented.Stimulus.name, variable) %>%
-    mutate(fixationIndex = fixationIndexer(value)) %>%
     filter(value == 1) %>%
-    arrange(Presented.Stimulus.name, Recording.timestamp) %>%
+    arrange(trialIndex, Presented.Stimulus.name, Recording.timestamp) %>%
+    group_by(Presented.Stimulus.name, trialIndex) %>%
+    mutate(fixationIndex = fixationIndexer(Gaze.event.duration)) %>% #Gets fixation index by Gaze event because they are always the same for a single fixatio
     ungroup() %>%
-    group_by(fixationIndex, trialIndex, variable) %>%
+    group_by(trialIndex, fixationIndex, Presented.Stimulus.name) %>%
     summarise(Presented.Stimulus.name = unique(Presented.Stimulus.name),
               variable = unique(variable),
-              eventStart = min(Recording.timestamp)/1000,
-              eventEnd = (max(Recording.timestamp)+8)/1000,
-              fixationDuration = sum(Gaze.event.duration)) %>%
+              eventStart = min(Recording.timestamp),
+              eventEnd = eventStart+unique(Gaze.event.duration)) %>%
     ungroup() %>%
-    arrange(Presented.Stimulus.name, eventStart, trialIndex)
+    arrange(trialIndex, eventStart)
 
     names = data$variable
     subs = c("AOI.hit", trials, ".")
@@ -83,15 +81,28 @@ visualizer = function(data){
     names = str_replace(names, "Esquerda", "E")
     names = str_replace(names, "Direita", "D")
     data$variable = names
-
-    data %>%
-      ggplot(aes(y = variable, x = 0, color = variable))+
-        facet_wrap(~Presented.Stimulus.name+trialIndex, scale = "free")+
-        geom_errorbar(aes(xmin = eventStart, xmax = eventEnd), width = 0, size = 3)+
-        theme(legend.position = "None",
-              strip.text.y = element_blank()) +
-        ylab("Stimulus focused")+
-        xlab("Elapsed time (ms)")
-
-     return(data) 
+       
+    if(plot == TRUE){
+      data %>%
+        ggplot(aes(y = variable, x = 0, color = variable))+
+          facet_wrap(~Presented.Stimulus.name+trialIndex, scale = "free")+
+          geom_errorbar(aes(xmin = eventStart, xmax = eventEnd), width = 0, size = 3)+
+          theme(legend.position = "None",
+                strip.text.y = element_blank()) +
+          ylab("Stimulus focused")+
+          xlab("Elapsed time (ms)")
+    }
+    return(data)
 }
+
+#Computa numero de alternancias ocorridas entre dois objetos
+computeAlternancia = function(x, alternancia){
+  count = 0
+  for(i in 1:length(x)-1){
+    if(all(c(x[1], x[i+1]) == alternancia) == TRUE){
+      count = count + 1
+    }
+  }
+  return(count)
+}
+
