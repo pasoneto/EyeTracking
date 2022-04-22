@@ -11,7 +11,11 @@ files = list.files()
 file_list = lapply(files, function(i){read.table(file = i, sep = '\t', header = TRUE)})
 path_out = "/Users/pdealcan/Documents/github/sabara/reports/report6/"
 
-a = visualizer(file_list[[1]], plot = FALSE)
+file_list[[1]] %>%
+  filter(Presented.Stimulus.name == "RJA_A1_B2_D2") %>%
+  dvisu()
+
+a = visualizer(file_list[[2]], plot = FALSE)
 
 #Definindo alternancias
 RBE = c('....R.', '....B.E.')
