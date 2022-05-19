@@ -5,7 +5,7 @@ setwd("/Users/pdealcan/Documents/github/sabara/data/allData")
 ########## Lendo e limpando o banco de dados
 files = list.files()
 file_list = lapply(files, function(i){read.table(file = i, sep = '\t', header = TRUE)})
-unique(file_list[[1]]$Presented.Stimulus.name)
+
 #Selecting columns of interest by trial type
 trials = c("IJA_A3_B1_D","IJA_A1_B2_E","RJA_A2_B1_E","RJA_A1_B2_D","RJA_A2_B2_E","IJA_A1_B1_D","IJA_A3_B1_E","RJA_A2_B1_D","IJA_A1_B1_E")
 colunas = c()
@@ -88,6 +88,12 @@ final %>%
   summarise(media = mean(ratio),
             min = min(ratio),
             max = max(ratio),
-            sd = sd(ratio)) %>%
+            sd = sd(ratio),
+            N = length(ratio)) %>%
   write.csv("./targetAndBaseline.csv")
+
+
+gazeSamples = fread("/Users/pdealcan/Documents/github/sabara/data/gaze_sample.csv")
+colnames(gazeSamples)
+mean(gazeSamples$Percentage)
 
