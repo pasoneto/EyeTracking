@@ -1,10 +1,12 @@
 source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
+library("ggridges")
 setwd("/Users/pdealcan/Documents/github/dataSabara/allData")
 
 ########## Lendo e limpando o banco de dados
 files = list.files()
 file_list = lapply(files, function(i){read.table(file = i, sep = '\t', header = TRUE)})
+file_list = file_list[1:(length(file_list)-1)]
 
 #Selecting columns of interest by trial type
 trials = c("IJA_A3_B1_D","IJA_A1_B2_E","RJA_A2_B1_E","RJA_A1_B2_D","RJA_A2_B2_E","IJA_A1_B1_D","IJA_A3_B1_E","RJA_A2_B1_D","IJA_A1_B1_E")
@@ -18,97 +20,88 @@ for(i in trials){
 addedNames = c("AOI.hit..RJA_A2_B1_E...Brinquedo.Direita..1", "AOI.hit..RJA_A2_B1_E...Brinquedo.Esquerda..1", "AOI.hit..RJA_A2_B1_E...Rosto..1", "AOI.hit..RJA_A2_B2_E...Brinquedo.Direita..1", "AOI.hit..RJA_A2_B2_E...Brinquedo.Esquerda..1", "AOI.hit..RJA_A2_B2_E...Rosto..1")
 colunas = c(colunas, addedNames)
 
-processParticipant = function(dataFrame, trials, colunas){
+#Processing all participants
+allParticipants = lapply(file_list, function(i){processParticipant(i, trials, colunas)})
+allParticipants = bind_rows(allParticipants)
 
-  participantID = unique(dataFrame$Recording.name)
-  data = dataFrame %>%
-    filter(Presented.Stimulus.name != "Eyetracker Calibration") %>% ##Removendo partes de calibração
-    filter(Presented.Stimulus.name %in% trials) %>% #Selecionando video 
-    select("Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", "Eye.movement.type.index", colunas) %>%
-    melt(id.vars = c("Computer.timestamp", "Recording.timestamp", "Gaze.event.duration", "Presented.Stimulus.name", "Eye.movement.type", "Eye.movement.type.index"))
+#Check 1 child
+allParticipants %>%
+  filter(Recording.name == "RP105IP") %>%
+  ggplot(aes(y = variable, x = 0, color = variable))+
+    facet_wrap(~Presented.Stimulus.name+trialIndex, scale = "free")+
+    geom_errorbar(aes(xmin = Recording.time.begin, xmax = Recording.time.end), width = 0, size = 3)+
+    theme(legend.position = "None", strip.text.y = element_blank()) +
+    ylab("Stimulus focused")+
+    xlab("Elapsed time (ms)")
 
-  data %<>%
-    filter(!is.na(value)) %>%
-    arrange(Computer.timestamp) %>%
-    ungroup() %>%
-    mutate(trialIndex = fixationIndexer(Presented.Stimulus.name)) %>%
-    group_by(Presented.Stimulus.name, trialIndex)
-
-  data %<>%
-    #Converting time to seconds. First from microseconds, then from miliseconds
-    mutate(Recording.timestamp = (Recording.timestamp - min(Recording.timestamp))/1000000,
-           Gaze.event.duration = Gaze.event.duration/1000) %>%
-    arrange(trialIndex, Recording.timestamp) %>%
-    group_by(Presented.Stimulus.name, variable) %>%
-    filter(value == 1) %>%
-    arrange(trialIndex, Presented.Stimulus.name, Recording.timestamp) %>%
-    ungroup() %>%
-    group_by(trialIndex, Eye.movement.type.index) %>%
-    group_by(Presented.Stimulus.name, trialIndex, Eye.movement.type.index) %>%
-    summarise(Computer.timestamp.begin = min(Computer.timestamp),
-              Computer.timestamp.end = max(Computer.timestamp),
-              Recording.time.begin = min(Recording.timestamp),
-              Recording.time.end = max(Recording.timestamp),
-              Gaze.event.duration = unique(Gaze.event.duration),
-              Presented.Stimulus.name = unique(Presented.Stimulus.name),
-              Eye.movement.type = unique(Eye.movement.type),
-              variable = unique(variable),
-              value = unique(value))
-
-  data %<>%
-    ungroup() %>%
-    group_by(trialIndex, Eye.movement.type.index, Presented.Stimulus.name) %>%
-    arrange(trialIndex, Recording.time.begin)
-
-  names = data$variable
-  subs = c("AOI.hit", trials, ".")
-  for(i in subs){
-    names = str_replace(names, i, "")
-  }
-  names = str_replace(names, "Rosto", "R")
-  names = str_replace(names, "Brinquedo", "B")
-  names = str_replace(names, "Esquerda", "E")
-  names = str_replace(names, "Direita", "D")
-  names = str_replace(names, "1", "")
-  names = gsub("\\.","",names)
-
-  data$variable = names
-
-  foco = stri_sub(data$Presented.Stimulus.name,-1)
-  variable = stri_sub(data$variable,-1)
-  data$target = foco
-  data$variable = variable
-  data$Recording.name = participantID
-
-  return(data)
-}
-
-processParticipant(file_list[[2]], trials, colunas) %>%
-    ggplot(aes(y = variable, x = 0, color = variable))+
-      facet_wrap(~Presented.Stimulus.name+trialIndex, scale = "free")+
-      geom_errorbar(aes(xmin = Recording.time.begin, xmax = Recording.time.end), width = 0, size = 3)+
-      theme(legend.position = "None",
-            strip.text.y = element_blank()) +
-      ylab("Stimulus focused")+
-      xlab("Elapsed time (ms)")
-
-a = processParticipant(file_list[[2]], trials, colunas)
-
-alternanciaCount = function(listFixation, obj1, obj2){
-  count = 0
-  for(i in 1:(length(listFixation)-1)){
-    if( (listFixation[i] == obj1) && (listFixation[i+1] == obj2) ){
-      count = count+1
-    }
-  }
-  return(count)
-}
-
-a %>%
+op = allParticipants %>%
+  filter(Recording.name == "RP105IP") %>%
   group_by(Presented.Stimulus.name, trialIndex) %>%
+  filter(NROW(variable) > 1) %>% 
   summarise(RD = alternanciaCount(variable, "R", "D"),
             RE = alternanciaCount(variable, "R", "E"),
             DR = alternanciaCount(variable, "D", "R"),
             ER = alternanciaCount(variable, "E", "R"),
             target = unique(target),
+            Recording.name = unique(Recording.name)) %>%
+  ungroup() %>%
+  select(Presented.Stimulus.name, target, RD, RE, DR, ER)
+
+op[op==0]<-NA
+
+op %>%
+  select(Presented.Stimulus.name, RD, RE, DR, ER) %>% dvisu()
+  heatmap(scale="column", labRow = op$target, Colv = NA, Rowv = NA)
+
+alternancias = allParticipants %>%
+  group_by(Presented.Stimulus.name, trialIndex, Recording.name) %>%
+  filter(NROW(variable) > 1) %>% 
+  summarise(RD = alternanciaCount(variable, "R", "D"),
+            RE = alternanciaCount(variable, "R", "E"),
+            DR = alternanciaCount(variable, "D", "R"),
+            ER = alternanciaCount(variable, "E", "R"),
+            condition = stri_sub(unique(Presented.Stimulus.name), 1, 3),
+            target = unique(target),
             Recording.name = unique(Recording.name))
+
+#Visualização geral de alternancias
+alternancias %>%
+  filter(condition == "IJA") %>%
+  group_by(Recording.name, condition, target) %>%
+  summarise(RD_count = sum(RD), 
+            RE_count = sum(RE),
+            DR_count = sum(DR),
+            ER_count = sum(ER)) %>%
+  melt(id.vars = c("condition", "target", "Recording.name")) %>%
+  ggplot(aes(y = target, x = value, fill = target)) +
+    facet_wrap(~variable)+
+    geom_density_ridges() +
+    theme_ridges() + 
+    theme(legend.position = "none")
+
+alternancias %>%
+  filter(condition == "IJA") %>%
+  group_by(Recording.name, condition, target) %>%
+  summarise(RD_count = sum(RD), 
+            RE_count = sum(RE),
+            DR_count = sum(DR),
+            ER_count = sum(ER)) %>%
+  melt(id.vars = c("condition", "target", "Recording.name")) %>%
+  ggplot(aes(y = target, x = value, fill = target)) +
+    facet_wrap(~variable)+
+    geom_density_ridges() +
+    theme_ridges() + 
+    theme(legend.position = "none")
+alternancias %>%
+  filter(condition == "RJA") %>%
+  group_by(Recording.name, condition, target) %>%
+  summarise(RD_count = sum(RD), 
+            RE_count = sum(RE),
+            DR_count = sum(DR),
+            ER_count = sum(ER)) %>%
+  melt(id.vars = c("condition", "target", "Recording.name")) %>%
+  ggplot(aes(y = target, x = value, fill = target)) +
+    facet_wrap(~variable)+
+    geom_density_ridges() +
+    theme_ridges() + 
+    theme(legend.position = "none")
