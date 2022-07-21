@@ -23,10 +23,10 @@ visualizeTotalTime = function(df){
 }
 
 #Time spent on each object, by trial
-for(i in 1:length(file_list)){
+for(i in 1:5){
   a = visualizer(file_list[[i]])
   visualizeTotalTime(a) 
   file_name = paste(path_out, "graph_visu", i, ".png", sep="")
-  ggsave(file_name, width = 30, height = 20, units = "cm")
+  #ggsave(file_name, width = 30, height = 20, units = "cm")
 }
 
