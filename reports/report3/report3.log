@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.9.20)  21 JUL 2022 11:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.9.20)  21 JUL 2022 11:20
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**report4.tex
-(./report4.tex
+**report3.tex
+(./report3.tex
 LaTeX2e <2020-10-01> patch level 4
 L3 programming layer <2021-02-18> (/usr/local/texlive/2021/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
@@ -22,11 +22,18 @@ File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen138
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count187
+\float@exts=\toks15
+\float@box=\box47
+\@float@everytoks=\toks16
+\@floatcapt=\box48
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
  (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks15
+\KV@toks@=\toks17
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
  (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/trig.sty
@@ -42,8 +49,8 @@ File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
 \Gin@req@width=\dimen140
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2020/08/01 v1.3d Input encoding file
-\inpenc@prehook=\toks16
-\inpenc@posthook=\toks17
+\inpenc@prehook=\toks18
+\inpenc@posthook=\toks19
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
  (/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/ifvtex.sty
@@ -51,9 +58,9 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
  (/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty
 Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
-\Gm@cnth=\count187
-\Gm@cntv=\count188
-\c@Gm@tempcnt=\count189
+\Gm@cnth=\count188
+\Gm@cntv=\count189
+\c@Gm@tempcnt=\count190
 \Gm@bindingoffset=\dimen141
 \Gm@wd@mp=\dimen142
 \Gm@odd@mp=\dimen143
@@ -62,7 +69,7 @@ Package: iftex 2020/03/06 v1.0d TeX engine tests
 \Gm@layoutheight=\dimen146
 \Gm@layouthoffset=\dimen147
 \Gm@layoutvoffset=\dimen148
-\Gm@dimlist=\toks18
+\Gm@dimlist=\toks20
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/xurl/xurl.sty
 Package: xurl 2020/12/30 v 0.09a modify URL breaks
  (/usr/local/texlive/2021/texmf-dist/tex/latex/url/url.sty
@@ -70,38 +77,38 @@ Package: xurl 2020/12/30 v 0.09a modify URL breaks
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )) (/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count190
-\l__pdf_internal_box=\box47
-) (./report4.aux)
-\openout1 = `report4.aux'.
+\l__color_backend_stack_int=\count191
+\l__pdf_internal_box=\box49
+) (./report3.aux)
+\openout1 = `report3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
  (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count191
+\scratchcounter=\count192
 \scratchdimen=\dimen149
-\scratchbox=\box48
-\nofMPsegments=\count192
-\nofMParguments=\count193
-\everyMPshowfont=\toks19
-\MPscratchCnt=\count194
+\scratchbox=\box50
+\nofMPsegments=\count193
+\nofMParguments=\count194
+\everyMPshowfont=\toks21
+\MPscratchCnt=\count195
 \MPscratchDim=\dimen150
-\MPnumerator=\count195
-\makeMPintoPDFobject=\count196
-\everyMPtoPDFconversion=\toks20
+\MPnumerator=\count196
+\makeMPintoPDFobject=\count197
+\everyMPtoPDFconversion=\toks22
 ) (/usr/local/texlive/2021/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -143,52 +150,46 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 12.
+(Font)              <12> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 12.
+(Font)              <8> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 12.
-<./graph_visu1.png, id=1, 3556.28625pt x 2370.8575pt>
-File: ./graph_visu1.png Graphic file (type png)
-<use ./graph_visu1.png>
-Package pdftex.def Info: ./graph_visu1.png  used on input line 30.
-(pdftex.def)             Requested size: 597.50787pt x 398.33752pt.
-<./graph_visu2.png, id=3, 3556.28625pt x 2370.8575pt>
-File: ./graph_visu2.png Graphic file (type png)
-<use ./graph_visu2.png>
-Package pdftex.def Info: ./graph_visu2.png  used on input line 36.
-(pdftex.def)             Requested size: 597.50787pt x 398.33752pt.
-<./graph_visu3.png, id=4, 3556.28625pt x 2370.8575pt>
-File: ./graph_visu3.png Graphic file (type png)
-<use ./graph_visu3.png>
-Package pdftex.def Info: ./graph_visu3.png  used on input line 42.
-(pdftex.def)             Requested size: 597.50787pt x 398.33752pt.
-<./graph_visu4.png, id=5, 3556.28625pt x 2370.8575pt>
-File: ./graph_visu4.png Graphic file (type png)
-<use ./graph_visu4.png>
-Package pdftex.def Info: ./graph_visu4.png  used on input line 48.
-(pdftex.def)             Requested size: 597.50787pt x 398.33752pt.
-<./graph_visu5.png, id=6, 3556.28625pt x 2370.8575pt>
-File: ./graph_visu5.png Graphic file (type png)
-<use ./graph_visu5.png>
-Package pdftex.def Info: ./graph_visu5.png  used on input line 54.
-(pdftex.def)             Requested size: 597.50787pt x 398.33752pt.
+(Font)              <6> on input line 13.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 17.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 17.
+<./dovalys.png, id=1, 681.54625pt x 199.74625pt>
+File: ./dovalys.png Graphic file (type png)
+<use ./dovalys.png>
+Package pdftex.def Info: ./dovalys.png  used on input line 34.
+(pdftex.def)             Requested size: 613.38596pt x 179.76996pt.
+<./dovalysgraph.png, id=3, 354.32375pt x 291.0875pt>
+File: ./dovalysgraph.png Graphic file (type png)
+<use ./dovalysgraph.png>
+Package pdftex.def Info: ./dovalysgraph.png  used on input line 40.
+(pdftex.def)             Requested size: 354.32288pt x 291.08678pt.
+<./abacaxi.png, id=4, 333.245pt x 292.09125pt>
+File: ./abacaxi.png Graphic file (type png)
+<use ./abacaxi.png>
+Package pdftex.def Info: ./abacaxi.png  used on input line 47.
+(pdftex.def)             Requested size: 333.24417pt x 292.09052pt.
 [1
 
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2 <./graph_visu1.png>] [3 <./graph_visu2.png>] [4 <./graph_visu3.png>] [5 <./graph_visu4.png>] [6 <./graph_visu5.png>] (./report4.aux) ) 
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2 <./dovalys.png> <./dovalysgraph.png>] [3 <./abacaxi.png>] (./report3.aux) ) 
 Here is how much of TeX's memory you used:
- 1858 strings out of 478994
- 27854 string characters out of 5858184
- 325492 words of memory out of 5000000
- 19353 multiletter control sequences out of 15000+600000
- 407685 words of font info for 41 fonts, out of 8000000 for 9000
+ 1907 strings out of 478994
+ 28403 string characters out of 5858184
+ 327863 words of memory out of 5000000
+ 19401 multiletter control sequences out of 15000+600000
+ 407377 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 68i,6n,74p,450b,236s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on report4.pdf (6 pages, 1235184 bytes).
+ 68i,7n,74p,412b,239s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on report3.pdf (3 pages, 567098 bytes).
 PDF statistics:
- 54 PDF objects out of 1000 (max. 8388607)
- 30 compressed objects within 1 object stream
+ 41 PDF objects out of 1000 (max. 8388607)
+ 24 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
