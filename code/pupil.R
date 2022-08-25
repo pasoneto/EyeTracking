@@ -1,69 +1,66 @@
 source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library("ggridges")
-setwd("/Users/pdealcan/Documents/github/dataSabara/allData")
+directory = "/Users/pdealcan/Documents/github/dataSabara/processedPupil/"
+library("readxl")
 
-########## Lendo e limpando o banco de dados
+#######################################################
+########### Fetch processed pupil dilation ############
+#######################################################
+setwd(directory)
+
 files = list.files()
-file_list = lapply(files, function(i){read.table(file = i, sep = '\t', header = TRUE)})
-file_list = file_list[1:(length(file_list)-1)] #remove last problematic file
+file_list = lapply(files, function(i){
+                   a = fread(i)
+                   a = a %>% select(!V1)
+                   return(a)
+            }
+)
+setwd("../")
 
-#Selecting columns of interest by trial type
-trials = c("IJA_A3_B1_D","IJA_A1_B2_E","RJA_A2_B1_E","RJA_A1_B2_D","RJA_A2_B2_E","IJA_A1_B1_D","IJA_A3_B1_E","RJA_A2_B1_D","IJA_A1_B1_E")
-colunas = c()
-foco = c("Rosto.", "Brinquedo.Direita.", "Brinquedo.Esquerda.")
-for(i in trials){
- for(k in foco){
-  colunas = c(colunas, paste("AOI.hit..", i, "...", k, sep = ""))
- }
-}
-addedNames = c("Fixation.point.X", "AOI.hit..RJA_A2_B1_E...Brinquedo.Direita..1", "AOI.hit..RJA_A2_B1_E...Brinquedo.Esquerda..1", "AOI.hit..RJA_A2_B1_E...Rosto..1", "AOI.hit..RJA_A2_B2_E...Brinquedo.Direita..1", "AOI.hit..RJA_A2_B2_E...Brinquedo.Esquerda..1", "AOI.hit..RJA_A2_B2_E...Rosto..1")
-colunas = c(colunas, addedNames)
+library(plyr)
+allParticipants <- ldply(file_list, data.frame)
+filterColumns = c("Eye.movement.type.index", "Pupil.diameter.left", "Pupil.diameter.right", "Recording.timestamp", "Presented.Stimulus.name", "trialIndex", "variable", "target", "Recording.name", "pupil")
+allParticipants = allParticipants %>% select(filterColumns)
+detach(package:plyr)
+allParticipants$condition = stri_sub(allParticipants$Presented.Stimulus.name, 1, 3)
 
+##Adicionando diagnostico
+diags = c("FS9IP", "FS24IP", "FS65IP", "FS76IP", "FS93IP", "RP100IP", "SM114IP", "SM118IP", "MR135IP", "MR136IP", "MR140IP", "SF142IP", "SF234IP", "SF246IP", "MR281IP", "MR285IP", "MR299IP", "CR348IP", "CR356IP", "RP373IP", "SI429IP", "SI430IP", "SM462IP", "MP466IP", "CR475IP", "MR534IP", "CR559IP", "SM581IP", "MR589IP", "SI619IP", "RP657IP", "CR683IP", "MR688IP", "MR691IP", "SF728IP", "SI776IP", "SM787IP")
+allParticipants$tea = FALSE
+allParticipants$tea[allParticipants$Recording.name %in% diags] <- TRUE
 
 #######################################
 ########### Pupil dilation ############
 #######################################
-allParticipants = lapply(file_list, function(i){processPupil(i, trials, colunas)})
+#allParticipants %>%
+#  filter(Recording.name == "CR359IP") %>%
+#  ggplot(aes(x = Recording.timestamp, y = pupil, color = variable))+
+#    facet_wrap(~Presented.Stimulus.name+trialIndex, scale = "free")+
+#    geom_point(size=0.5)
 
-allParticipants[[5]] %>%
-  ggplot(aes(x = Recording.timestamp, y = pupil, color = variable))+
-    facet_wrap(~Presented.Stimulus.name+trialIndex, scale = "free")+
-    geom_point(size=0.5)
+#ggsave('/Users/pdealcan/Documents/github/sabara/reports/report10/oneParticipant.png')
 
-ggsave('/Users/pdealcan/Documents/github/sabara/reports/report10/oneParticipant.png')
-
-
-allParticipants = bind_rows(allParticipants)
 allParticipants$condition = stri_sub(allParticipants$Presented.Stimulus.name, 1, 3)
 
 comparisons = allParticipants %>%
-  group_by(Recording.name, trialIndex, Presented.Stimulus.name, variable, target, condition) %>%
-  summarise(mean = mean(pupil, na.rm = TRUE))
+  filter(!is.na(pupil)) %>%
+  group_by(Recording.name, trialIndex, Presented.Stimulus.name, variable, target, condition, tea) %>%
+  summarise(pupil = mean(pupil, na.rm = TRUE))
+
+comparisons = comparisons %>%
+  group_by(condition, tea) %>%
+  summarise(meanPupil = mean(pupil),
+            stder = sd(pupil)/sqrt(length(pupil))
+  )
+
+library(xtable)
+xtable(comparisons, type = "latex")
 
 comparisons %>%
-  filter(variable != 'X') %>%
-  filter(condition == 'IJA') %>%
-  ggplot(aes(y = variable, x = mean, fill = variable)) +
-    facet_wrap(~target) +
-    geom_density_ridges() +
-    theme_ridges() + 
-    theme(legend.position = "none")
+  ggplot(aes(x = condition, y = meanPupil, color = tea)) +
+    facet_wrap(~tea) +
+    geom_point() +
+    geom_errorbar(aes(ymin = meanPupil - stder, ymax = meanPupil + stder))
 
-ggsave('/Users/pdealcan/Documents/github/sabara/reports/report10/totalIJA.png')
-
-comparisons %>%
-  filter(variable != 'X') %>%
-  filter(condition == 'RJA') %>%
-  ggplot(aes(y = variable, x = mean, fill = variable)) +
-    facet_wrap(~target) +
-    geom_density_ridges() +
-    theme_ridges() + 
-    theme(legend.position = "none")
-
-ggsave('/Users/pdealcan/Documents/github/sabara/reports/report10/totalRJA.png')
-
-
-#Dilatacao carga cognitiva
-#comparar IJA com RJA. Within subject.
-#Trending
+ggsave('/Users/pdealcan/Documents/github/sabara/reports/report13/pupil.png')

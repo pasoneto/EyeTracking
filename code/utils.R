@@ -29,14 +29,55 @@ fixationIndexer = function(x){
   return(indexes)
 }
 
+#Identifies which case is only focusing on Fundo
+fundoUniquer = function(fundo, esquerda, direita, rosto){
+  if(is.na(esquerda)){esquerdaNA = 0}else{esquerdaNA = esquerda}
+  if(is.na(rosto)){rostoNA = 0}else{rostoNA = rosto}
+  if(is.na(direita)){direitaNA = 0}else{direitaNA = direita}
+  if(is.na(fundo)){fundoNA = 0}else{fundoNA = fundo}
+  soma = esquerdaNA + direitaNA + rostoNA
+  if(soma != 0){
+    return(0)
+  } else {
+    return(fundo)
+  }
+}
+
+#Applies 0 to fundo when it is also focused on rosto, esquerda ou direita
+detatchFundo = function(file, directoryOut){
+
+  trials = c("IJA_A3_B1_D","IJA_A1_B2_E","RJA_A2_B1_E","RJA_A1_B2_D","RJA_A2_B2_E","IJA_A1_B1_D","IJA_A3_B1_E","RJA_A2_B1_D","IJA_A1_B1_E")
+  addedBaseline = c("BL_LC_A1_B2", "BL_S_A1_B2", "BL_LC_A3_B1", "BL_S_A3_B1", "BL_LC_A2_B1", "BL_S_A2_B1", "BL_LC_A2_B2", "BL_S_A2_B2", "BL_LC_A1_B1", "BL_S_A1_B1")
+  trialsFundo = c(trials, addedBaseline)
+
+  for(i in 1:length(trialsFundo)){
+    fundo = file %>% select(contains(trialsFundo[[i]])) %>% select(contains("Fundo"))
+    esquerda = file %>% select(contains(trialsFundo[[i]])) %>% select(contains("Esquerda"))
+    direita = file %>% select(contains(trialsFundo[[i]])) %>% select(contains("Direita"))
+    rosto = file %>% select(contains(trialsFundo[[i]])) %>% select(contains("rosto"))
+    newFundo = c()
+    for(k in 1:length(fundo[[1]])){
+      newFundo = c(newFundo, fundoUniquer(fundo[[1]][k], esquerda[[1]][k], direita[[1]][k], rosto[[1]][k]))
+    }
+    colnameToChange = file %>% select(contains(trialsFundo[[i]])) %>% select(contains("Fundo")) %>% colnames()
+    file[colnameToChange] = newFundo
+  }
+  nameFile = unique(file$Recording.name)
+  write.csv(file, paste(directoryOut, nameFile, ".csv", sep = ""))
+  print(paste("Done with", nameFile, sep=" "))
+  return(file)
+}
+
 #Process participant completely
 processParticipant = function(dataFrame, trials, colunas){
-
+  
   participantID = unique(dataFrame$Recording.name)
   data = dataFrame %>%
     filter(Presented.Stimulus.name != "Eyetracker Calibration") %>% ##Removendo partes de calibração
     filter(Presented.Stimulus.name %in% trials) %>% #Selecionando video 
-    select("Pupil.diameter.left", "Pupil.diameter.right", "Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", "Eye.movement.type.index", colunas) %>%
+    select("Pupil.diameter.left", "Pupil.diameter.right", "Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", "Eye.movement.type.index", colunas)
+
+  data %<>%
     melt(id.vars = c("Pupil.diameter.left", "Pupil.diameter.right", "Computer.timestamp", "Recording.timestamp", "Gaze.event.duration", "Presented.Stimulus.name", "Eye.movement.type", "Eye.movement.type.index"))
 
   data %<>%
@@ -45,7 +86,7 @@ processParticipant = function(dataFrame, trials, colunas){
     ungroup() %>%
     mutate(trialIndex = fixationIndexer(Presented.Stimulus.name)) %>%
     group_by(Presented.Stimulus.name, trialIndex)
-
+    
   data %<>%
     #Converting time to seconds. First from microseconds, then from miliseconds
     mutate(Recording.timestamp = (Recording.timestamp - min(Recording.timestamp))/1000000,
@@ -184,6 +225,8 @@ alternanciaCount = function(listFixation, obj1, obj2){
 
 #Selecting columns of interest by trial type
 trials = c("IJA_A3_B1_D","IJA_A1_B2_E","RJA_A2_B1_E","RJA_A1_B2_D","RJA_A2_B2_E","IJA_A1_B1_D","IJA_A3_B1_E","RJA_A2_B1_D","IJA_A1_B1_E")
+addedBaseline = c("BL_LC_A1_B2", "BL_S_A1_B2", "BL_LC_A3_B1", "BL_S_A3_B1", "BL_LC_A2_B1", "BL_S_A2_B1", "BL_LC_A2_B2", "BL_S_A2_B2", "BL_LC_A1_B1", "BL_S_A1_B1")
+trials = c(trials, addedBaseline)
 colunas = c()
 foco = c("Rosto.", "Brinquedo.Direita.", "Brinquedo.Esquerda.")
 for(i in trials){
@@ -191,5 +234,78 @@ for(i in trials){
   colunas = c(colunas, paste("AOI.hit..", i, "...", k, sep = ""))
  }
 }
-addedNames = c("Fixation.point.X", "AOI.hit..RJA_A2_B1_E...Brinquedo.Direita..1", "AOI.hit..RJA_A2_B1_E...Brinquedo.Esquerda..1", "AOI.hit..RJA_A2_B1_E...Rosto..1", "AOI.hit..RJA_A2_B2_E...Brinquedo.Direita..1", "AOI.hit..RJA_A2_B2_E...Brinquedo.Esquerda..1", "AOI.hit..RJA_A2_B2_E...Rosto..1")
-colunas = c(colunas, addedNames)
+
+fundos = c("AOI.hit..IJA_A3_B1_D...Fundo.", "AOI.hit..IJA_A1_B2_E...Fundo.", "AOI.hit..RJA_A2_B1_E...Fundo.", "AOI.hit..RJA_A1_B2_D...Fundo.", "AOI.hit..IJA_A1_B1_D...Fundo.", "AOI.hit..IJA_A3_B1_E...Fundo.", "AOI.hit..RJA_A2_B1_D...Fundo.", "AOI.hit..IJA_A1_B1_E...Fundo.")
+addedNames = c("Fixation.point.X", "AOI.hit..RJA_A2_B1_E...Brinquedo.Direita..1", "AOI.hit..RJA_A2_B1_E...Brinquedo.Esquerda..1", "AOI.hit..RJA_A2_B1_E...Rosto..1", "AOI.hit..RJA_A2_B2_E...Brinquedo.Direita..1", "AOI.hit..RJA_A2_B2_E...Brinquedo.Esquerda..1", "AOI.hit..RJA_A2_B2_E...Rosto..1", "AOI.hit..RJA_A2_B1_E...Fundo..1")
+colunasWithFix = c(colunas, addedNames, fundos)
+colunasWithoutFix = c(colunas, fundos)
+
+#Participantes com diagnostico tea
+tagDiagnostico = function(x){
+  diagnostico = c("FS9IP", "FS24IP", "FS65IP", "FS76IP", "FS93IP", "RP100IP", "SM114IP", "SM118IP", "MR135IP", "MR136IP", "MR140IP", "SF142IP", "SF234IP", "SF246IP", "MR281IP", "MR285IP", "MR299IP", "CR348IP", "CR356IP", "RP373IP", "SI429IP", "SI430IP", "SM462IP", "MP466IP", "CR475IP", "MR534IP", "CR559IP", "SM581IP", "MR589IP", "SI619IP", "RP657IP", "CR683IP", "MR688IP", "MR691IP", "SF728IP", "SI776IP", "SM787IP")
+  if(x %in% diagnostico){
+    return("true")
+  } else {
+    return("false")
+  }
+}
+
+#Computes total time of each video per participant
+totalTime = function(x){
+  if(NROW(x)>2){
+    df = x %>%
+      group_by(Presented.Stimulus.name, trialIndex) %>%
+      summarise(Recording.name = unique(Recording.name),
+                totalTime = (max(Recording.timestamp) - min(Recording.timestamp))/1000000)
+    return(df)
+  }
+}
+
+#read excel files and rename problematic columns
+readAndRename = function(x){
+  a = read_excel(x)
+  colNames = a %>% colnames()
+  colNames = lapply(colNames, function(i){str_replace_all(i, "[ -]", ".")} )
+  colNames = lapply(colNames, function(i){chartr("[]", "..", i)})
+  colnames(a) = colNames
+  return(a)
+}
+
+
+#Process participant completely
+processParticipantTime = function(dataFrame, trials, colunas){
+  
+  participantID = unique(dataFrame$Recording.name)
+  data = dataFrame %>%
+    filter(Presented.Stimulus.name != "Eyetracker Calibration") %>% ##Removendo partes de calibração
+    filter(Presented.Stimulus.name %in% trials) %>% #Selecionando video 
+    select("Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", "Eye.movement.type.index", colunas)
+
+  data %<>%
+    melt(id.vars = c("Computer.timestamp", "Recording.timestamp", "Gaze.event.duration", "Presented.Stimulus.name", "Eye.movement.type", "Eye.movement.type.index"))
+
+  data %<>%
+    filter(!is.na(value)) %>%
+    arrange(Computer.timestamp) %>%
+    ungroup() %>%
+    mutate(trialIndex = fixationIndexer(Presented.Stimulus.name)) %>%
+    group_by(Presented.Stimulus.name, trialIndex)
+    
+  data %<>%
+    arrange(trialIndex, Recording.timestamp) %>%
+    group_by(Presented.Stimulus.name, variable) %>%
+    arrange(trialIndex, Presented.Stimulus.name, Recording.timestamp) %>%
+    ungroup() %>%
+    group_by(Presented.Stimulus.name, trialIndex) %>%
+    summarise(Recording.time.begin = min(Recording.timestamp),
+              Recording.time.end = max(Recording.timestamp),
+              trialDuration = Recording.time.end - Recording.time.begin,
+              Presented.Stimulus.name = unique(Presented.Stimulus.name),
+              Eye.movement.type = unique(Eye.movement.type))
+  data %<>%
+    group_by(Presented.Stimulus.name, trialIndex) %>%
+    summarise(trialDuration = unique(trialDuration))
+
+  return(data)
+}
+
