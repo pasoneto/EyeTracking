@@ -25,11 +25,15 @@ diags = c("FS9IP", "FS24IP", "FS65IP", "FS76IP", "FS93IP", "RP100IP", "SM114IP",
 allParticipants$tea = FALSE
 allParticipants$tea[allParticipants$Recording.name %in% diags] <- TRUE
 
+
+unique(allParticipants$variable)
+
 #Olhou pra fundo? sim nao
 #Quanto tempo passou entre fixação? Limite x
 #Alternancia é quando ha transicao direta, com tempo menor que x
 alternancias = allParticipants %>%
   group_by(Presented.Stimulus.name, trialIndex, Recording.name) %>%
+  filter(!is.na(trialIndex)) %>%
   filter(NROW(variable) > 2) %>% 
   summarise(RD = alternanciaCount(variable, "R", "D"),
             RE = alternanciaCount(variable, "R", "E"),
@@ -40,6 +44,19 @@ alternancias = allParticipants %>%
             condition = stri_sub(unique(Presented.Stimulus.name), 1, 3),
             target = unique(target),
             Recording.name = unique(Recording.name))
+
+dadosAnova = alternancias %>%
+  group_by(Recording.name, condition, target, tea) %>%
+  summarise(RD_count = sum(RD), 
+            RE_count = sum(RE),
+            DR_count = sum(DR),
+            ER_count = sum(ER)) %>%
+  melt(id.vars = c("condition", "target", "Recording.name", "tea")) %>%
+  group_by(condition, Recording.name, tea, variable) %>%
+    summarise(count = sum(value))
+
+write.csv(dadosAnova, '../../dataSabara/alternanciaDadosANOVA.csv')
+
 
 alternancias %>%
   filter(condition == "RJA") %>%

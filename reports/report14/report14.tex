@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage{graphicx} %package to manage images
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{float}
+\title{Relatório 14 \\ Verificações}
+\author{Pedro A. S. O. Neto}
+\date{Novembro, 2022}
+
+\begin{document}
+
+\maketitle
+
+\section{Testes automatizados}
+
+Para testar a qualidade do processamento de dados feito até este momento, foram implementadas algumas medidas automatizadas de consistência.
+
+Para o processamento de dados fazer sentido, é necessário que:
+  
+\begin{itemize}
+  \item O Computer.timestamp pertença a uma non-increasing monotonic function. Isto é, que apenas suba (e.g. o tempo $t+1$ não pode ser maior do que o tempo $t$)
+  \item Não pode haver repetição no Computer.timestamp. Isto é, cada evento deve ser distinto no tempo, de modo que não haja, por exemplo, duas fixações ocorrendo no mesmo momento
+  \item Cada Recording.name (código do participante) esteja presente no banco de dados apenas uma vez
+\end{itemize}
+
+\section{Análise automatizada}
+
+Foram desenvolvidos os códigos necessários para a avaliação dessas assumptions. \href{https://github.com/pasoneto/EyeTracking/tree/master/code/verificacoes/assumptions}{Código disponível aqui}
+
+\section{Resultados}
+
+As assumptions foram verificadas e confirmadas num set de 493 participantes.
+
+\end{document}

@@ -1,3 +1,4 @@
+#Calculates the total time spent looking at the screen by different conditions
 source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library("ggridges")
@@ -32,6 +33,9 @@ allParticipants1 = allParticipants1 %>%
 
 ##Adicionando diagnostico
 diags = c("FS9IP", "FS24IP", "FS65IP", "FS76IP", "FS93IP", "RP100IP", "SM114IP", "SM118IP", "MR135IP", "MR136IP", "MR140IP", "SF142IP", "SF234IP", "SF246IP", "MR281IP", "MR285IP", "MR299IP", "CR348IP", "CR356IP", "RP373IP", "SI429IP", "SI430IP", "SM462IP", "MP466IP", "CR475IP", "MR534IP", "CR559IP", "SM581IP", "MR589IP", "SI619IP", "RP657IP", "CR683IP", "MR688IP", "MR691IP", "SF728IP", "SI776IP", "SM787IP")
+
+SM794IP
+
 allParticipants1$tea = FALSE
 allParticipants1$tea[allParticipants1$Recording.name %in% diags] <- TRUE
 
@@ -43,6 +47,29 @@ allParticipants1 %>%
   summarise(count = length(tea))
 
 allParticipants1$condition = stri_sub(allParticipants1$Presented.Stimulus.name, 1, 3)
+allParticipants1
+
+library(afex)
+
+anovaData = allParticipants1 %>%
+  group_by(condition, tea, Recording.name) %>%
+  summarise(totalFixation = mean(totalFixation, na.rm = TRUE))
+
+mixed_anova <- aov_ez(
+  id = "Recording.name",
+  dv = "totalFixation",
+  data = anovaData,
+  between = "tea",
+  within = "condition"
+)
+
+anovaData %>%
+  group_by(condition, tea) %>%
+  summarise(mean = mean(totalFixation))
+
+t.test(totalFixation ~ tea, data=anovaData, na.rm=TRUE)
+
+write.csv(anovaData, "../../dataSabara/fixationDataANOVA.csv")
 
 #Descriptive
 descriptive1 = allParticipants1 %>%
@@ -65,7 +92,7 @@ descriptive2 = allParticipants1 %>%
   group_by(tea, condition) %>%
   summarise(meanRatio = mean(totalFixation),
             stder = sd(totalFixation)/sqrt(length(totalFixation)))
-
+write.csv(allParticipants1, "/Users/pdealcan/Documents/github/dataSabara/fixationDataANOVA.csv")
 xtable(descriptive2, type = "latex")
 
 allParticipants1 %>%

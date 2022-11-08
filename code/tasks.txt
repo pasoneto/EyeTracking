@@ -1,0 +1,11 @@
+#Plotar proporcao de fixacão por trial
+#Decidir thresholds (por trial ou por condição)
+#Pegar duração dos vídeos
+
+Análises
+#Numero de alrernância
+#Tempo de fixação
+#Diâmetro de pupila
+
+
+

@@ -48,12 +48,22 @@ comparisons = allParticipants %>%
   group_by(Recording.name, trialIndex, Presented.Stimulus.name, variable, target, condition, tea) %>%
   summarise(pupil = mean(pupil, na.rm = TRUE))
 
+anovaData = comparisons %>%
+  ungroup() %>%
+  select(pupil, Recording.name, condition, tea) %>%
+  group_by(condition, Recording.name) %>%
+  summarise(pupil = mean(pupil),
+            tea = unique(tea))
+
+write.csv(anovaData, "/Users/pdealcan/Documents/github/dataSabara/pupilDataAnova.csv")
+
 comparisons = comparisons %>%
   group_by(condition, tea) %>%
   summarise(meanPupil = mean(pupil),
             stder = sd(pupil)/sqrt(length(pupil))
   )
 
+comparisons
 library(xtable)
 xtable(comparisons, type = "latex")
 
