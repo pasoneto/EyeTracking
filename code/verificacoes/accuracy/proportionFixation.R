@@ -14,12 +14,12 @@ file_list = lapply(files, function(i){
                    return(a)
             }
 )
-
+file_list[[1]]
 allParticipants1 = lapply(file_list, processOne)
 allParticipants1 = dplyr::bind_rows(allParticipants1)
 
 allParticipants1 = allParticipants1 %>% filter(condition != "BL")
-
+allParticipants1
 allParticipants1 %<>% 
   group_by(Recording.name, Presented.Stimulus.name) %>%
   summarise(totalFixation = unique(totalFixation),
@@ -44,13 +44,18 @@ allParticipants1 %>%
   mutate(proportion = totalFixation/totalDuration) %>%
   arrange(Recording.name, Presented.Stimulus.name) %>%
   ggplot(aes(x=proportion)) +
-    facet_wrap(~tea)+
-    geom_density()
+    facet_wrap(~Presented.Stimulus.name, scale="free")+
+    geom_histogram()
 
+#SI692IP
+#IJA_A3_B1_D_33
 a = readAndRename("/Users/pdealcan/Documents/github/dataSabara/AllData/3/Joint Attention 2022 SI692IP.xlsx")
-a = readAndRename("/Users/pdealcan/Documents/github/dataSabara/AllData/3/Joint Attention 2022 SI429IP.xlsx")
+a %>% 
+    select("Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", "Eye.movement.type.index", colunas) %>%
+    filter(Eye.movement.type == "fixation") %>% divisu())
+    dvisu()
+  dvisu()
 unique(a$Event.value)
-
 
 #RJA_A1_B2_D
 #FS749IP

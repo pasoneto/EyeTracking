@@ -7,5 +7,5 @@ Análises
 #Tempo de fixação
 #Diâmetro de pupila
 
-
-
+#Cortar todos os vídeos com duração "errada"
+#Aplicar o cutoff 50% fixações validas, em relacao ao tempo original do video.

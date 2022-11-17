@@ -14,6 +14,7 @@ for(l in c("0", "1", "2", "3", "4")){
   file_list = lapply(files, function(i){readAndRename(paste(directoryCurrent, i, sep = "/"))})
   samplingRates = c(samplingRates, lapply(file_list, samplingRate))
   durations = c(durations, lapply(file_list, timeConsistency))
+  print(l)
 }
 
 samplingRates = bind_rows(samplingRates)

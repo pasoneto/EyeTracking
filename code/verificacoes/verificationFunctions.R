@@ -33,7 +33,7 @@ timeConsistency = function(a){
     select(Recording.name, Event, Event.value, Computer.timestamp) %>%
     filter(Event %in% c("VideoStimulusStart", "VideoStimulusEnd")) %>%
     filter(!str_detect(Event.value, 'Eyetracker Calibration|BL_|bichinhocolorido|bola|fadinha'))
-
+  
   if(NROW(a) > 1){
     indexing = fixationIndexer(a$Event.value)
     a$Event.value = paste(a$Event.value, indexing, sep = "_")
@@ -49,4 +49,10 @@ timeConsistency = function(a){
   } else{
     return(NULL)
   }
+}
+
+microToSec = function(df){
+  df$Computer.timestamp = as.integer(df$Computer.timestamp/1000000)
+  df$Eyetracker.timestamp = as.integer(df$Eyetracker.timestamp/1000000)
+  return(df)
 }

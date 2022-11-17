@@ -3,47 +3,67 @@ library("stringr")
 library("readxl")
 directory = "/Users/pdealcan/Documents/github/dataSabara/AllData"
 
+setwd("/Users/pdealcan/Documents/github/sabara/code/verificacoes/accuracy/")
+
 srs = fread("./samplingRates.csv")
 durations = fread("./timeAll.csv") 
 colnames(durations) = c("V1", "Presented.Stimulus.name", "time", "N", "Recording.name")
 
 a = merge(durations, srs, by.x = c("Presented.Stimulus.name", "Recording.name"), by.y = c("Presented.Stimulus.name", "Recording.name"))
-durations %>% colnames()
-
-a %>%
-  filter(Recording.name == "SI692IP") %>%
-  group_by(Presented.Stimulus.name, Recording.name) %>%
-  summarise(srsSD = sd(d),
-            maxSR = max(d),
-            minSR = min(d)) %>%
-  filter(Recording.name == "SI692IP") %>%
-  filter(str_detect(Presented.Stimulus.name, "IJA_A3_B1_D_33")) %>%
-  dvisu()
-
 a$Presented.Stimulus.name = substr(a$Presented.Stimulus.name, 1, 11)
+
+#MR261IP
+#RJA_A2_B1_D 
+
+#RJA_A1_B2_D
+#FS749IP
+
+#Boxplot of trial durations
+boxplotDurations = a %>%
+  ggplot(aes(y = time/1000000))+
+    facet_wrap(~Presented.Stimulus.name)+
+    geom_boxplot()
+
+ggsave("../../../reports/report15/durations.png")
+
+#Getting single outlier case
 a %>%
-  group_by(Presented.Stimulus.name, Recording.name) %>%
-  summarise(durationsSD = sd(time),
-            maxDuration = max(time)/1000000,
-            minDuration = min(time)/1000000) %>%
-  arrange(minDuration) %>% dvisu()
+  select(time, Presented.Stimulus.name, Recording.name) %>%
+  filter(str_detect(Presented.Stimulus.name, 'RJA_A2_B2_E')) %>%
+  filter(Recording.name == "CR641IP") %>%
+  unique()
+#First presentation of the video RJA_A2_B2_E tem 4.2s, second presentation has 8.6
+
+##Investigating if larger duration time is due to abnormal sampling rates
+outlierCase = a %>%
+  select(time, Presented.Stimulus.name, Recording.name, d) %>%
+  filter(str_detect(Presented.Stimulus.name, 'RJA_A2_B2_E')) %>%
+  filter(Recording.name == "CR641IP")
+ 
+baseline = a %>%
+  select(time, Presented.Stimulus.name, Recording.name, d) %>%
+  filter(str_detect(Presented.Stimulus.name, 'RJA_A2_B2_E'))
+
+outlierCase = data.frame(duration = c(outlierCase$d, baseline$d),
+                         case = c(rep("outlierCase", length(outlierCase$d)), rep("baseline", length(baseline$d))))
+
+outlierComparison = outlierCase %>%
+  filter(duration > 8300) %>%
+  ggplot(aes(x = duration, color = case))+
+    geom_density()
+
+ggsave("../../../reports/report15/srs.png")
+
+#Double checking duration for outlier participant #CR641IP, trial #RJA_A2_B2_E
+a = readAndRename("/Users/pdealcan/Documents/github/dataSabara/AllData/0/Joint Attention 2022 CR641IP.xlsx")
+a %<>%
+  filter(!is.na(Presented.Stimulus.name)) %>%
+  filter(!str_detect(Presented.Stimulus.name, 'Eyetracker Calibration|BL_|bichinhocolorido|bola|fadinha|MASK'))
+
+indexing = fixationIndexer(a$Presented.Stimulus.name)
+a$Presented.Stimulus.name = paste(a$Presented.Stimulus.name, indexing, sep = "_")
 
 a %>%
-  group_by(Presented.Stimulus.name, Recording.name) %>%
-  summarise(durationsSD = sd(d),
-            maxDuration = max(d),
-            minDuration = min(d)) %>%
-  arrange(-maxDuration) %>%
-  dvisu()
-
-#Check sampling rate OK
-#Duracao total dos vídeos (Boxplot) (duracao dos ms)
-#Cortar videos que estao abaixo e acima da media
-#Pegar tempo de fixação usando o método do Computer.timestamp, porém só para fixações (excluir sacadas, EyesNotFound, etc...)
-
-a %>%
+  filter(str_detect(Presented.Stimulus.name, 'RJA_A2_B2_E')) %>%
   group_by(Presented.Stimulus.name) %>%
-  filter(str_detect(Presented.Stimulus.name, 'RJA_A1_B2_D')) %>%
-  dvisu()
-
-RJA_A1_B2_D
+  summarise(dur = max(Computer.timestamp) - min(Computer.timestamp))
