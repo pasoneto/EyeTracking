@@ -1,0 +1,160 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{tabulary}
+\geometry{a4paper,margin=1.5cm,bottom=.75cm}
+
+\usepackage[table]{xcolor}
+
+\usepackage{array}
+\newcolumntype{L}{>{\centering\arraybackslash}m{3cm}}
+
+\usepackage{fontawesome5}
+\usepackage{ragged2e}
+\usepackage{parskip}
+
+\usepackage{booktabs,makecell,xltabular}
+
+\usepackage[T1]{fontenc}
+\usepackage[lf,default]{FiraSans}
+\usepackage{zi4}
+
+\usepackage{regexpatch}
+\usepackage[os=mac]{menukeys}
+\renewmenumacro{\keys}[+]{shadowedroundedkeys}
+\renewmenumacro{\menu}[>]{angularmenus}
+\xpatchcmd*{\SPACE}{2em}{1em}{}{}
+
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+\renewcommand{\arraystretch}{1.4}
+\arrayrulecolor{gray!60!white}
+
+\makeatletter
+\renewcommand{\maketitle}{{\centering\sffamily{\LARGE\bfseries\@title}\par\vskip\baselineskip{\large\@date}\par}\vskip\baselineskip}
+% nifty commands by Paul Gaborit from http://tex.stackexchange.com/a/236891/226
+\def\setmenukeyswin{\def\tw@mk@os{win}}
+\def\setmenukeysmac{\def\tw@mk@os{mac}}
+\makeatother
+
+\usepackage{hyperref}
+\urlstyle{same}
+
+\title{Descrição da \textit{MasterFile}}
+\author{Pedro A. S. O. Neto}
+\date{Created 03 Jan, 2023}
+
+\begin{document}
+
+\maketitle
+
+\emph{Descrição geral da \textit{MasterFile}. São descritos os detalhes sobre como cada variável foi calculada, bem como o que cada uma significa.} 
+
+\emph{Cada linha do banco de dados representa uma fixação. As colunas podem ser descritivas a nivel de fixação (e.g., pupil.right, Gaze.event.duration, variable), a nível de trial (e.g., target, conditon, totalFixation), ou a nível de participante (e.g., Recording.name, tea, filtroCondition).}
+
+\emph{Os níveis descritivos estão indicados ao final de cada descrição. T (trial), P (participante), F (Fixação)}
+
+\bigskip
+
+\begin{center}
+\begin{tabular}{|c|L|L|}
+    \hline
+    \textbf{Nome} & \multicolumn{1}{m{10cm}|}{\textbf{Descrição}} \\
+    \hline 
+    
+    Recording.name & \multicolumn{1}{m{10cm}|}{Código do participante. \textit{(P)}.}\\
+    \hline
+    
+    Presented.Stimulus.name & \multicolumn{1}{m{10cm}|}{Nome do vídeo apresentado. Alguns vídeos foram apresentados mais de uma vez. O numero depois do underline (\_) indica a ordem na qual o vídeo foi apresentado dentro de cada timeline. \textit{(T)}.}    \\
+    \hline
+
+    condition & \multicolumn{1}{m{10cm}|}{Condição do experimento. Pode ser RJA, IJA, ou BL\_ (Baseline). \textit{(T)}.}    \\
+    \hline
+    
+    tea & \multicolumn{1}{m{10cm}|}{Diagnóstico. true indica TEA, false indica TD. \textit{(P)}.}    \\
+    \hline
+
+    target & \multicolumn{1}{m{10cm}|}{Área alvo do vídeo. Pode ser D (Brinquedo Direita), E (Brinquedo Esquerda), ou B (Baseline). \textit{(T)}.} \\
+    \hline
+
+    variable & \multicolumn{1}{m{10cm}|}{Área onde o participante está olhando durante a fixação atual. Pode ser E (Esquerda), D (Direita), R (Rosto) ou F (Fundo). \textit{(F)}.}\\
+    \hline
+
+    focus & \multicolumn{1}{m{10cm}|}{Qualidade da área onde o participante está olhando. Pode ser Target (participante está olhando para o brinquedo correto); distractor (participante está olhando para brinquedo oposto ao brinquedo Target); R (rosto); F (fundo). \textit{(F)}.}   \\
+    \hline
+    
+    Recording.time.begin & \multicolumn{1}{m{10cm}|}{Time-stamp onde a fixação se iniciou (segundos). \textit{(F)}.}    \\
+    \hline
+    
+    Recording.time.end & \multicolumn{1}{m{10cm}|}{Time-stamp onde a fixação termina (segundos). \textit{(F)}.}    \\
+    \hline
+
+    Gaze.event.duration & \multicolumn{1}{m{10cm}|}{Duração da fixação (segundos). Calculada como Recording.time.end \- Recording.time.begin. \textit{(F)}.}    \\
+    \hline
+
+    pupil.right & \multicolumn{1}{m{10cm}|}{Média do diâmetro da pupila direita durante a fixação. Verificar unidade. \textit{(F)}.}    \\
+    \hline
+
+    pupil.left & \multicolumn{1}{m{10cm}|}{Média do diâmetro da pupila esquerda durante a fixação. Verificar unidade. \textit{(F)}.}    \\
+    \hline
+
+    totalFixation & \multicolumn{1}{m{10cm}|}{Tempo total (segundos) de fixação (em qualquer área da tela). Valor calculado como a somatória do Gaze.event.duration durante cada trial, para cada participante. \textit{(T)}.}    \\
+    \hline
+    
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|L|L|}
+    \hline
+    \textbf{Nome} & \multicolumn{1}{m{10cm}|}{\textbf{Descrição}} \\
+    \hline 
+
+    proportionFixation & \multicolumn{1}{m{10cm}|}{Proporção $\%$ que a fixação representa em relação à fixação total (totalFixation). A soma das proporções ao londo de cada trial, para cada participante, é sempre igual a 1. \textit{(F)}.}    \\
+    \hline
+
+    targetProportion & \multicolumn{1}{m{10cm}|}{Proporção do tempo que o participante passou olhando para o \textit{target} (ver definição de target e de \textit{focus} acima) para cada trial/participante. Ex.: Se o participante olhou para o Target durante todo o vídeo, o valor será 1. Caso contrário, 0. \textit{(T)}.}    \\
+    \hline
+
+    distractorProportion & \multicolumn{1}{m{10cm}|}{Proporção do tempo que o participante passou olhando para o \textit{distractor} (ver definição de target e de \textit{focus} acima) para cada trial/participante. Ex.: Se o participante olhou para o distractor durante todo o vídeo, o valor será 1. Caso contrário, 0. \textit{(T)}.}    \\
+    \hline
+
+    fundoProportion & \multicolumn{1}{m{10cm}|}{Proporção do tempo que o participante passou olhando para o \textit{fundo} (ver definição acima) para cada trial/participante. Ex.: Se o participante olhou para o fundo durante todo o vídeo, o valor será 1. Caso contrário, 0. \textit{(T)}.}    \\
+    \hline
+
+    rostoProportion & \multicolumn{1}{m{10cm}|}{Proporção do tempo que o participante passou olhando para o \textit{rosto} (ver definição acima) para cada trial/participante. Ex.: Se o participante olhou para o rosto durante todo o vídeo, o valor será 1. Caso contrário, 0. A soma das proporções de fundoProportion, distractorProportion, rostoProportion, targetProportion é sempre igual a 1. \textit{(T)}.}    \\
+    \hline
+
+    RD & \multicolumn{1}{m{10cm}|}{Número de alternâncias entre Rosto (R) e Brinquedo Direita (D) para cada trial e participante. Alternância é considerada independente do tempo passado entre as fixações consecutivas. \textit{(T)}.}    \\
+    \hline
+    
+    RE & \multicolumn{1}{m{10cm}|}{Número de alternâncias entre Rosto (R) e Brinquedo Esquerda (E) para cada trial e participante. Alternância é considerada independente do tempo passado entre as fixações consecutivas. \textit{(T)}.}    \\
+    \hline
+
+    DR & \multicolumn{1}{m{10cm}|}{Número de alternâncias entre Brinquedo Direita (D) e Rosto (R) para cada trial e participante. Alternância é considerada independente do tempo passado entre as fixações consecutivas. \textit{(T)}.}    \\
+    \hline
+
+    ER & \multicolumn{1}{m{10cm}|}{Número de alternâncias entre Brinquedo Esquerda (D) e Rosto (R) para cada trial e participante. Alternância é considerada independente do tempo passado entre as fixações consecutivas. \textit{(T)}.}    \\
+    \hline
+    
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|L|L|}
+    \hline
+    \textbf{Nome} & \multicolumn{1}{m{10cm}|}{\textbf{Descrição}} \\
+    \hline 
+    
+    filterDurations & \multicolumn{1}{m{10cm}|}{Filtro para vídeos com duração anômala. Duração anômala foi definida como vídeo com duração outlier. Isto é, uma duração menor ou maior do que a duração dos outros vídeos (segundo critério de $IQR*1.5$). Durações menores do que o normal são causadas por vídeos interrompidos pelo aplicador do experimento. Vídeos mais longos que o normal são devidos a problema técnico na captação do TOBII. TRUE indica vídeos que devem ser filtrados, FALSE indica vídeos que devem remanescer. \textit{(T)}.}    \\
+    \hline
+    
+    filterCutoffs & \multicolumn{1}{m{10cm}|}{Filtro para trials de participantes cujo tempo de fixação (em qualquer área da tela) é menor do que $50\%$ do tempo do vídeo. TRUE indica vídeos que devem ser filtrados, FALSE indica vídeos que devem remanescer. \textit{(T)}.}\\
+    \hline
+
+    filterConditions & \multicolumn{1}{m{10cm}|}{Filtro para participantes que não possuem ao menos $1$ trial válido em cada condição do experiment (RJA e IJA). Baseline é desconsiderada. ATENCÃO: este filtro só é válido caso os demais filtros sejam aplicados, visto que, sem a exclusão trials com ao menos $50\%$ de fixação, a análise do número de trials por condição é alterada. \textit{(P)}.}\\
+    \hline
+
+    
+\end{tabular}
+\end{center}
+
+\end{document}

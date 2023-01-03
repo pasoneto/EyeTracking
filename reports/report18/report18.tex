@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage{graphicx} %package to manage images
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{float}
+\title{Relatório 18 \\ Processamento completo e dados remanescentes}
+\author{Pedro A. S. O. Neto}
+\date{Janeiro, 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Resultados}
+
+São reportadas todas as etapas de pré-processamento. Para cada etapa, é reportado o número de participantes remanescentes com e sem TEA.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlrrr}
+  \hline
+ & Etapas & Total & TD & TEA \\
+  \hline
+1 & Inicio & 657 & 630 &  27 \\
+  2 & Pré processamento - Participantes sem dados & 648 & 622 &  26 \\
+  3 & Pré processamento - Duração anômala dos vídeos & 645 & 619 &  26 \\
+  4 & Cutoffs - 50\% do tempo de fixação & 567 & 547 &  20 \\
+  5 & Cutoffs - 1 trial por condição & 456 & 443 &  13 \\
+   \hline
+\end{tabular}
+\end{table}
+
+\subsection{Observações}
+
+\begin{itemize}
+  \item \textbf{Etapa 1} - Recebi 679 files, com nomes repetidos, e participantes sem dados. Mantive apenas um caso para cada participante. Some participants have no data at all. Only unclassified/eyes not found. Some fixations, but only during calibration, SM462IP, SI421IP, SF226IP, MT706IP-2, MR324IP, MR313IP, FS12IP, CR632IP, CR397IP
+  \item \textbf{Etapa 2} - Excluídos participantes sem dados. Sem fixações, sacadas, etc...
+  \item \textbf{Etapa 3} - Excluídas trials com duração outlier. Sem exclusão, 6904 trials. Com exclusão, 6660 trials de participantes TD, e 217 TEA"
+  \item \textbf{Etapa 4} - Excluídos participantes que não olharam pelo menos 50\% do tempo do vídeo para a tela. Restam 73 trials de TEA, e 2978 de TD"
+  \item \textbf{Etapa 5} - Excluídos participantes que não têm ao menos 1 trial em cada condição. 2790 trials para TD, e 66 para TEA
+\end{itemize}
+
+\end{document}
+

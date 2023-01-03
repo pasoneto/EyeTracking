@@ -3,6 +3,7 @@ source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library("readxl")
 library("ggridges")
+library(xtable)
 directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipant/"
 
 setwd(directory)
@@ -14,13 +15,12 @@ file_list = lapply(files, function(i){
                    return(a)
             }
 )
-file_list[[1]] %>% colnames()
+
+a = bind_rows(file_list)
 allParticipants1 = lapply(file_list, processOne)
 allParticipants1 = dplyr::bind_rows(allParticipants1)
-
 allParticipants1 = allParticipants1 %>% filter(condition != "BL")
-allParticipants1
-allParticipants1 %<>% 
+allParticipants1 = allParticipants1 %>% 
   group_by(Recording.name, Presented.Stimulus.name) %>%
   summarise(totalFixation = unique(totalFixation),
             tea = unique(tea)
@@ -38,34 +38,17 @@ timeTrials %<>% filter(!duplicated(Original.names))
 #Merge with database
 allParticipants1 = merge(allParticipants1, timeTrials, by = "Original.names")
 
+#Merge CARS
+cars = fread("../../dataSabara/CARS.csv")
+colnames(cars) = c("Recording.name", "cars")
+allParticipants1 = merge(allParticipants1, cars, by = "Recording.name")
+
+#Still need to check the cases with "TRANSFERIDO", or missing numbers
 #Visualize distribution
 allParticipants1 %>%
-  group_by(Recording.name, Presented.Stimulus.name) %>%
+  group_by(Recording.name, Original.names) %>%
   mutate(proportion = totalFixation/totalDuration) %>%
-  arrange(Recording.name, Presented.Stimulus.name) %>%
-  ggplot(aes(x=proportion)) +
-    facet_wrap(~Presented.Stimulus.name, scale="free")+
-    geom_histogram()
-
-#SI692IP
-#IJA_A3_B1_D_33
-a = readAndRename("/Users/pdealcan/Documents/github/dataSabara/AllData/3/Joint Attention 2022 SI692IP.xlsx")
-a %>% 
-    select("Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", "Eye.movement.type.index", colunas) %>%
-    filter(Eye.movement.type == "fixation") %>% divisu())
-    dvisu()
-  dvisu()
-unique(a$Event.value)
-
-#RJA_A1_B2_D
-#FS749IP
-#Manual calculation = 908+1200+425+1933+825 == 5291*2
-#Algorithm calculation = 10.582
-#10.582/2 == manual calculation / 10957 with saccades and eyes not found
-
-#Checar video_end-video_start para todos os participantes e trials
-
-#IJA_A1_B2_E (duration reported 7.175039)
-#MR275IP (Manual = 7931)
-#Manual caltulation = 7315 / 7947 including saccades, eyes not found and non-classified
-
+  summarise(total = mean(proportion),
+            cars = as.numeric(unique(cars))) %>% #
+  ggplot(aes(x=Original.names, y=total, color=cars)) +
+    geom_jitter()

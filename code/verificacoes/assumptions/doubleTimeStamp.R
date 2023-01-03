@@ -3,7 +3,7 @@ source("/Users/pdealcan/Documents/github/sabara/code/verificacoes/verificationFu
 library("stringr")
 library("ggridges")
 library("readxl")
-directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipant"
+directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL"
 setwd(directory)
 
 repeatedTime = function(x){

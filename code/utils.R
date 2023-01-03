@@ -70,11 +70,19 @@ detatchFundo = function(file, directoryOut){
 
 #Process participant completely
 processParticipant = function(dataFrame, trials, colunas){
-
+  
   participantID = unique(dataFrame$Recording.name)
+  nomeColunas = colnames(dataFrame)
+  nomeColunas = str_replace_all(nomeColunas, "..mm.", "")  
+  nomeColunas = str_replace_all(nomeColunas, "..μs.", "")  
+  nomeColunas = str_replace_all(nomeColunas, "..ms.", "")
+  nomeColunas = str_replace_all(nomeColunas, ".novo", "")
+
+  colnames(dataFrame) = nomeColunas
+
   data = dataFrame %>%
     filter(Presented.Stimulus.name != "Eyetracker Calibration") %>% ##Removendo partes de calibração
-    select("Pupil.diameter.left", "Pupil.diameter.right", "Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", "Eye.movement.type.index", colunas)
+    select(any_of(c("Pupil.diameter.left", "Pupil.diameter.right", "Computer.timestamp", "Presented.Stimulus.name", "Eye.movement.type", "Gaze.event.duration", "Recording.timestamp", "Eye.movement.type.index", colunas)))
 
   data %<>%
     melt(id.vars = c("Pupil.diameter.left", "Pupil.diameter.right", "Computer.timestamp", "Recording.timestamp", "Gaze.event.duration", "Presented.Stimulus.name", "Eye.movement.type", "Eye.movement.type.index"))
@@ -92,6 +100,12 @@ processParticipant = function(dataFrame, trials, colunas){
     arrange(Recording.timestamp) %>%
     group_by(Presented.Stimulus.name, variable) %>%
     filter(value == 1)
+  
+  data$Pupil.diameter.right = as.numeric(gsub(",", ".", data$Pupil.diameter.right)) 
+  data$Pupil.diameter.left = as.numeric(gsub(",", ".", data$Pupil.diameter.left)) 
+  
+  print(data$Pupil.diameter.right)
+  print(data$Pupil.diameter.left)
 
   if(nrow(data) > 1){
     data %<>%
@@ -137,6 +151,16 @@ processParticipant = function(dataFrame, trials, colunas){
     data$variable = str_replace(data$variable, "o", "F")
 
     data = data %>% arrange(Presented.Stimulus.name, Computer.timestamp.begin)
+
+    data = data %>%
+      filter(!is.na(target))
+
+    data$target = str_replace_all(data$target, " \\(1\\)", "")
+    data$target = str_replace_all(data$target, " \\(novo\\)", "")
+    data$Presented.Stimulus.name = str_replace_all(data$Presented.Stimulus.name, " \\(1\\)", "")
+    data$Presented.Stimulus.name = str_replace_all(data$Presented.Stimulus.name, " \\(novo\\)", "")
+
+    data$Gaze.event.duration = data$Recording.time.end - data$Recording.time.begin
 
     return(data)
   } else {
@@ -269,11 +293,12 @@ totalTime = function(x){
 
 #read excel files and rename problematic columns
 readAndRename = function(x){
-  a = read_excel(x)
+  #a = read_excel(x)
+  a = fread(x)
   colNames = a %>% colnames()
   colNames = lapply(colNames, function(i){str_replace_all(i, "[ -]", ".")} )
   colNames = lapply(colNames, function(i){chartr("[]", "..", i)})
-  colnames(a) = colNames
+  colnames(a) = unlist(colNames)
   return(a)
 }
 
@@ -352,7 +377,7 @@ processOne = function(data){
     data %<>%
       select(filterColumns)
     data$condition = sapply(str_split(data$Presented.Stimulus.name, "_"), `[`, 1)
-
+    
     data %<>%
       ungroup() %>%
       mutate(Gaze.event.duration = ((Computer.timestamp.end - Computer.timestamp.begin)/1000000)) %>%
@@ -370,4 +395,27 @@ processOne = function(data){
     print("No data")
     return(NULL)
   }
+}
+
+#Checks if participant is looking to given target
+checkCorrectTarget = function(looking, target){
+  if(looking == 'E' | looking == "D"){
+    if(looking == target){
+      return("target")
+    } else {
+      return("distractor")
+    }
+  } else {
+    return(looking)
+  }
+}
+
+checkFocus = function(a){
+  focus = c()
+  for(k in 1:length(a$variable)){
+    current = checkCorrectTarget(a$variable[k], a$target[k])
+    focus = c(focus, current)
+  }
+  a$focus = focus
+  return(a)
 }

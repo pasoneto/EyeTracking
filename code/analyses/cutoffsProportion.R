@@ -4,7 +4,7 @@ library("stringr")
 library("readxl")
 library("ggridges")
 library(xtable)
-directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipant/"
+directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL/"
 
 setwd(directory)
 
@@ -16,6 +16,8 @@ file_list = lapply(files, function(i){
             }
 )
 
+a = bind_rows(file_list)
+
 allParticipants1 = lapply(file_list, processOne)
 allParticipants1 = dplyr::bind_rows(allParticipants1)
 allParticipants1 = allParticipants1 %>% filter(condition != "BL")
@@ -25,7 +27,7 @@ allParticipants1 = allParticipants1 %>%
   summarise(totalFixation = unique(totalFixation),
             tea = unique(tea)
   )
-
+allParticipants1
 allParticipants1$Original.names = stri_sub(allParticipants1$Presented.Stimulus.name,1, 11)
 
 #Read duration of each trial
@@ -38,55 +40,30 @@ timeTrials %<>% filter(!duplicated(Original.names))
 #Merge with database
 allParticipants1 = merge(allParticipants1, timeTrials, by = "Original.names")
 
-#Visualize distribution
-histogramaProporcoes = allParticipants1 %>%
+filterOutNames075 = allParticipants1 %>%
   group_by(Recording.name, Original.names) %>%
   mutate(proportion = totalFixation/totalDuration) %>%
-  ggplot(aes(x=proportion)) +
-    facet_wrap(~Original.names, scale="free")+
-    geom_histogram()
-
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/report16/generalDistribution.png")
-
-zero15 = allParticipants1 %>%
-  group_by(Recording.name, Original.names) %>%
-  mutate(proportion = totalFixation/totalDuration) %>%
-  filter(proportion >= 0.15) %>%
+  filter(proportion <= 0.75) %>%
   ungroup() %>%
-  summarise(N_left = length(unique(Recording.name))/487,
-            n_trials = length(Presented.Stimulus.name)/5165,
-            threshold = 0.15
-  )
+  select(Presented.Stimulus.name, Recording.name) %>%
+  mutate(filterOutTrials = paste(Presented.Stimulus.name, Recording.name, sep = "")) %>%
+  select(filterOutTrials)
 
-zero25 = allParticipants1 %>%
+filterOutNames05 = allParticipants1 %>%
   group_by(Recording.name, Original.names) %>%
   mutate(proportion = totalFixation/totalDuration) %>%
-  filter(proportion >= 0.25) %>%
+  filter(proportion <= 0.5) %>%
   ungroup() %>%
-  summarise(N_left = length(unique(Recording.name))/487,
-            n_trials = length(Presented.Stimulus.name)/5165,
-            threshold = 0.25
-  )
+  select(Presented.Stimulus.name, Recording.name) %>%
+  mutate(filterOutTrials = paste(Presented.Stimulus.name, Recording.name, sep = "")) %>%
+  select(filterOutTrials)
 
-zero50 = allParticipants1 %>%
+filterOutNames025 = allParticipants1 %>%
   group_by(Recording.name, Original.names) %>%
   mutate(proportion = totalFixation/totalDuration) %>%
-  filter(proportion >= 0.50) %>%
+  filter(proportion <= 0.25) %>%
   ungroup() %>%
-  summarise(N_left = length(unique(Recording.name))/487,
-            n_trials = length(Presented.Stimulus.name)/5165,
-            threshold = 0.50
-  )
+  select(Presented.Stimulus.name, Recording.name) %>%
+  mutate(filterOutTrials = paste(Presented.Stimulus.name, Recording.name, sep = "")) %>%
+  select(filterOutTrials)
 
-zero75 = allParticipants1 %>%
-  group_by(Recording.name, Original.names) %>%
-  mutate(proportion = totalFixation/totalDuration) %>%
-  filter(proportion >= 0.75) %>%
-  ungroup() %>%
-  summarise(N_left = length(unique(Recording.name))/487,
-            n_trials = length(Presented.Stimulus.name)/5165,
-            threshold = 0.75
-)
-
-allThresholds = bind_rows(zero75, zero50, zero25, zero15)
-xtable(allThresholds)

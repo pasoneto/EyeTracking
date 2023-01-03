@@ -3,7 +3,7 @@ source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library("readxl")
 library("ggridges")
-directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipant/"
+directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL/"
 
 setwd(directory)
 

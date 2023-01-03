@@ -1,11 +1,9 @@
-#Plotar proporcao de fixacão por trial
-#Decidir thresholds (por trial ou por condição)
-#Pegar duração dos vídeos
-
-Análises
-#Numero de alrernância
-#Tempo de fixação
-#Diâmetro de pupila
-
 #Cortar todos os vídeos com duração "errada"
 #Aplicar o cutoff 50% fixações validas, em relacao ao tempo original do video.
+#Tirar criancas que nao tem pelo menos um trial em cada condicao
+
+#Plotar distribuição do tempo total de fixação rosto, brinquedo direito/esquerdo. Mesma coisa alternância
+#Tempo_total_fixação_ROIx/tempo_total_fixação
+
+#Comparação por autistas para thresholds (duration and proportion)
+#ANOVA em tudo

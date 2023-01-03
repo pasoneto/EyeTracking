@@ -1,19 +1,22 @@
 source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library("ggridges")
-directory = "/Users/pdealcan/Documents/github/dataSabara/AllData"
-directoryOut = "/Users/pdealcan/Documents/github/dataSabara/allIndexed/"
+directory = "/Users/pdealcan/Documents/github/dataSabara/finalRawData"
+directoryOut = "/Users/pdealcan/Documents/github/dataSabara/allIndexedFINAL/"
 setwd(directory)
 library("readxl")
 
-functionMerge = function(l){
-    directoryCurrent = paste(directory, "/", l, sep = "")
+setwd(directory)
 
-    setwd(directoryCurrent)
-
-    files = list.files()
-    file_list = lapply(files, function(i){
+functionMerge = function(fileNames){
+    logFailed = c()
+    file_list = lapply(fileNames, function(i){
       a = readAndRename(i)
+      namesOfColumns = a %>% colnames()
+      duplicatedCols = !all(namesOfColumns %>% duplicated())
+      if(duplicatedCols){
+        colnames(a) = make.unique(namesOfColumns) 
+      }
       currentName = unique(a$Recording.name)
       currentName = paste(currentName, ".csv", sep="")
       a %<>%
@@ -24,23 +27,14 @@ functionMerge = function(l){
         write.csv(a, paste(directoryOut, currentName, sep = ""))
         print(currentName)
       } else {
+        logFailed = c(i, logFailed)
         print("No data")
       }
     })
+    return(logFailed)
 }
 
-folders = list.files()
-for(l in folders){
-    skip_to_next <- FALSE   
-    tryCatch(
-      functionMerge(l),
-      error = function(e){
-        skip_to_next <<- TRUE
-        print(e)
-      },
-      finally = {
-        print(paste("Finished", l, sep = " "))
-      }
-    )
-}
+#Number of output files is lower than number of input files. That's because there are repeated participants, and the output file is named with the name of the participant. That results in no repeated files.
+files = list.files()
+logFailed = functionMerge(files)
 
