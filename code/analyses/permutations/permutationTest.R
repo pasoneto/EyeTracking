@@ -29,8 +29,8 @@ permutateFunction = function(df, N, analyseFunction){
   return(df)
 }
 
-#Alternancias 
-computeAlternancias = function(df){
+#Proportions 
+computeProportions = function(df){
   df = df %>%
     group_by(Recording.name, Presented.Stimulus.name, condition, tea) %>%
     summarise(distractorProportion = unique(distractorProportion),
@@ -47,25 +47,36 @@ computeAlternancias = function(df){
   return(df)
 }
 
-sampleTEA = dfTEA %>%
-  group_by(Recording.name, Presented.Stimulus.name, condition, tea) %>%
-  summarise(distractorProportion = unique(distractorProportion),
-            fundoProportion = unique(fundoProportion), 
-            targetProportion = unique(targetProportion), 
-            rostoProportion = unique(rostoProportion)) %>%
-  group_by(condition) %>%
-  summarise(distractorProportion = mean(distractorProportion),
-            fundoProportion = mean(fundoProportion),
-            targetProportion = mean(targetProportion), 
-            rostoProportion = mean(rostoProportion))
+
+#Compute alternancias
+computeAlternancias = function(df){
+  df = df %>%
+    group_by(Recording.name, Presented.Stimulus.name, condition, tea) %>%
+    summarise(targetRosto = sum(TR),
+              rostoTarget = sum(RT), 
+              distractorRosto = sum(DR), 
+              rostoDistractor = sum(RD)) %>%
+    group_by(condition) %>%
+    summarise(targetRosto = mean(targetRosto),
+              rostoTarget = mean(rostoTarget), 
+              distractorRosto = mean(distractorRosto), 
+              rostoDistractor = mean(rostoDistractor)) %>%
+    melt(id.vars = c("condition"))
+
+  return(df)
+}
+
+############################
+## Sample TEA proportions ##
+############################
+sampleTEA = computeProportions(dfTEA)
 
 samplesSet = c()
-for(k in 1:10000){
-  samplesSet[[k]] = permutateFunction(dfNonTEA, nTEA, computeAlternancias)
+for(k in 1:1000){
+  samplesSet[[k]] = permutateFunction(dfNonTEA, nTEA, computeProportions)
 }
 
 samplesSet = bind_rows(samplesSet)
-sampleTEA = sampleTEA %>% melt()
 
 vlines = geom_vline(data=sampleTEA, aes(xintercept=value), linetype="dashed", color="blue")
 samplesSet %>%
@@ -73,3 +84,26 @@ samplesSet %>%
     geom_histogram()+
     vlines+
     facet_wrap(~condition+variable, scale = "free")
+
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/report21/proportions.png")
+
+#############################
+## Sample TEA alternâncias ##
+#############################
+sampleTEA = computeAlternancias(dfTEA)
+
+samplesSet = c()
+for(k in 1:1000){
+  samplesSet[[k]] = permutateFunction(dfNonTEA, nTEA, computeAlternancias)
+}
+
+samplesSet = bind_rows(samplesSet)
+
+vlines = geom_vline(data=sampleTEA, aes(xintercept=value), linetype="dashed", color="blue")
+samplesSet %>%
+  ggplot(aes(x = value)) +
+    geom_histogram()+
+    vlines+
+    facet_wrap(~condition+variable, scale = "free")
+
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/report21/alternancias.png")

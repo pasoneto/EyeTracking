@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.9.20)  4 JAN 2023 01:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.9.20)  1 MAR 2023 12:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -730,13 +730,13 @@ Package rerunfilecheck Info: File `report19.out' has not changed.
 Here is how much of TeX's memory you used:
  25808 strings out of 478994
  488513 string characters out of 5858184
- 780059 words of memory out of 5000000
+ 781060 words of memory out of 5000000
  42815 multiletter control sequences out of 15000+600000
  512503 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,10n,130p,611b,402s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/fira/fir_tz2nek.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/public/fira/FiraSans-Bold.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/fira/FiraSans-BoldItalic.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/fira/FiraSans-Italic.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/fira/FiraSans-Regular.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on report19.pdf (3 pages, 172364 bytes).
+Output written on report19.pdf (3 pages, 172990 bytes).
 PDF statistics:
  77 PDF objects out of 1000 (max. 8388607)
  48 compressed objects within 1 object stream

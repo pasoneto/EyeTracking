@@ -70,7 +70,13 @@ a = a %>%
          RE = alternanciaCount(variable, "R", "E"),
          DR = alternanciaCount(variable, "D", "R"),
          ER = alternanciaCount(variable, "E", "R"),
-         ER = alternanciaCount(variable, "E", "R"))
+         ER = alternanciaCount(variable, "E", "R"),
+
+         RT = alternanciaCount(focus, "R", "target"),
+         TR = alternanciaCount(focus, "target", "R"),
+         RD = alternanciaCount(focus, "R", "distractor"),
+         DR = alternanciaCount(focus, "distractor", "R"),
+  )
 
 #File final elaborada
 a = a %>%
@@ -96,6 +102,10 @@ a = a %>%
          RE, 
          DR, 
          ER,
+         RT,
+         TR,
+         RD,
+         DR,
          filterDurations, 
          filterCutoffs, 
          filterConditions)
