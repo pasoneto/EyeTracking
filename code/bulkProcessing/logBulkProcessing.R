@@ -2,164 +2,100 @@ source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library(data.table)
 library(dplyr)
+library(xtable)
 
-#Número inicial de participantes
+infoParticipant = fread("/Users/pdealcan/Documents/github/dataSabara/infoParticipants.csv")
+
+######################
+## All participants ##
+######################
+logFile0 = infoParticipant %>% 
+  group_by(Sexo, tea) %>%
+  summarise(nParticipants = NROW(Recording.name))
+observacoes0 = c("Todos os participantes registrados, independente de conclusão do experimento ou não.")
+
+##################################################
+## All participants with Eye tracker (raw data) ##
+##################################################
 setwd("/Users/pdealcan/Documents/github/dataSabara/finalRawData/")
 file_list = list.files()
-getName = function(dataFrame){
-  a = readAndRename(dataFrame)
-  return(unique(a$Recording.name))
-}
-files = unlist(lapply(file_list, getName))
+allRaw = bind_rows(lapply(file_list, getName))
+allRaw = merge(allRaw, infoParticipant, by.x = "Recording.name", by.y = "Recording.name", all.x=FALSE)
 
-#N total de participantes. Sem repetições
-namesPresent = unique(files)
-length(namesPresent)
+logFile1 = allRaw %>%
+  group_by(Sexo, tea, Recording.name) %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  summarise(nTrials = length(unique(Presented.Stimulus.name))) %>%
+  group_by(Sexo, tea) %>%
+  summarise(nTrials = sum(nTrials),
+            nParticipants = length(unique(Recording.name)))
 
-nDiagnosticos = unlist(lapply(namesPresent, tagDiagnostico))
-nDiagnosticos = table(nDiagnosticos)
-
-logFiles = data.frame(etapa = c("Inicio"),
-           total = c(length(namesPresent)),
-           td = c(nDiagnosticos[[1]]),
-           tea = c(nDiagnosticos[[2]])
-)
-
-observacoes1 = c(paste("Recebi ", length(files), " files, com nomes repetidos, e participantes sem dados. Mantive apenas um caso para cada participante", sep=""))
-
-#Pré processamento
+#################################################
+## All participants with Eye tracker processed ##
+#################################################
 setwd("/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL")
-files = list.files()
-files = unlist(lapply(files, getName))
-
-nDiagnosticos = unlist(lapply(files, tagDiagnostico))
-nDiagnosticos = table(nDiagnosticos)
-
-logFiles2 = data.frame(etapa = c("Pré processamento - Participantes sem dados"),
-            total = c(length(files)),
-            td = c(nDiagnosticos[[1]]),
-            tea = c(nDiagnosticos[[2]])
-)
-
-observacoes2 = c("Excluídos participantes sem dados. Sem fixações, sacadas, etc...")
-
-#Cutoffs
-source("/Users/pdealcan/Documents/github/sabara/code/analyses/cutoffsVideoDuration.R")
-setwd("/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL")
-
-files = list.files()
-file_list = lapply(files, function(i){
-                   a = fread(i)
-                   a = a %>% select(!V1)
-                   return(a)
-            }
-)
-a = bind_rows(file_list)
-
-#N trials without filter
-a %>%
-  group_by(Recording.name) %>%
+processedP = list.files()
+processedP = bind_rows(lapply(processedP, getName2))
+processedP = merge(processedP, infoParticipant, by.x = "Recording.name", by.y = "Recording.name", all.y=FALSE)
+logFile2 = processedP %>%
+  group_by(Sexo, tea, Recording.name) %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
   summarise(nTrials = length(unique(Presented.Stimulus.name))) %>%
-  select(nTrials) %>%
-  ungroup() %>%
-  summarise(nTotal = sum(nTrials))
+  group_by(Sexo, tea) %>%
+  summarise(nTrials = sum(nTrials),
+            nParticipants = length(unique(Recording.name)))
 
-#N trials / participants after filter
-a = a %>% mutate(trialsToFilter = paste(Presented.Stimulus.name, Recording.name, sep = ""))
+################################
+## Anomalous videos durations ##
+################################
+masterF = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
+masterF = masterF %>% filter(filterDurations == FALSE)
+masterF$Recording.name = str_remove_all(masterF$Recording.name, "-2")
+masterF$Recording.name = str_remove_all(masterF$Recording.name, "-3")
+masterF$Presented.Stimulus.name = substr(masterF$Presented.Stimulus.name, 1, 11)
+masterF = masterF %>% select(!tea)
+masterF = merge(masterF, infoParticipant, by.x = "Recording.name", by.y = "Recording.name", all.y=FALSE)
 
-b = a %>%
-  filter(!trialsToFilter %in% filterOutDurations$filterOutDurations) %>%
-  group_by(Recording.name) %>%
+logFile3 = masterF %>%
+  group_by(Sexo, tea, Recording.name) %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
   summarise(nTrials = length(unique(Presented.Stimulus.name))) %>%
-  select(Recording.name, nTrials) %>%
-  ungroup()
-b$tea = unlist(lapply(b$Recording.name, tagDiagnostico))
-b %>%
-  group_by(tea) %>%
-  summarise(nTotal = sum(nTrials))
+  group_by(Sexo, tea) %>%
+  summarise(nTrials = sum(nTrials),
+            nParticipants = length(unique(Recording.name)))
 
-files = unique(b$Recording.name)
-nDiagnosticos = unlist(lapply(files, tagDiagnostico))
-nDiagnosticos = table(nDiagnosticos)
-
-logFiles3 = data.frame(etapa = c("Pré processamento - Duração anômala dos vídeos"),
-            total = c(length(files)),
-            td = c(nDiagnosticos[[1]]),
-            tea = c(nDiagnosticos[[2]])
-)
-
-observacoes3 = c("Excluídas trials com duração outlier. Sem exclusão, 6904 trials. Com exclusão, 6660 trials de participantes TD, e 217 TEA")
-
-#Cutoff proporção de 50%
-source("/Users/pdealcan/Documents/github/sabara/code/analyses/cutoffsProportion.R")
-b = a %>%
-  mutate(trialsToFilter = paste(Presented.Stimulus.name, Recording.name, sep = "")) %>%
-  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
-  filter(!trialsToFilter %in% filterOutDurations$filterOutDurations) %>% #anomalous videos duration
-  filter(!trialsToFilter %in% filterOutNames05$filterOutTrials) #0.5 cutoff
-
-files = unique(b$Recording.name)
-nDiagnosticos = unlist(lapply(files, tagDiagnostico))
-nDiagnosticos = table(nDiagnosticos)
-
-c = b %>%
-  group_by(Recording.name) %>%
+#################
+## Cutoffs 50% ##
+#################
+logFile4 = masterF %>%
+  filter(filterCutoffs == FALSE) %>%
+  group_by(Sexo, tea, Recording.name) %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
   summarise(nTrials = length(unique(Presented.Stimulus.name))) %>%
-  select(Recording.name, nTrials) %>%
-  ungroup()
-c$tea = unlist(lapply(c$Recording.name, tagDiagnostico))
-c %>%
-  group_by(tea) %>%
-  summarise(nTotal = sum(nTrials))
+  group_by(Sexo, tea) %>%
+  summarise(nTrials = sum(nTrials),
+            nParticipants = length(unique(Recording.name)))
 
-logFiles4 = data.frame(etapa = c("Cutoffs - 50% do tempo de fixação"),
-            total = c(length(files)),
-            td = c(nDiagnosticos[[1]]),
-            tea = c(nDiagnosticos[[2]])
-)
-
-observacoes4 = c("Excluídos participantes que não olharam pelo menos 50% do tempo do vídeo para a tela. Restam 73 trials de TEA, e 2978 de TD")
-
-#Cutoff um trial por condição
-b = b %>% 
-  mutate(condition = substr(Presented.Stimulus.name, 1, 3)) %>%
-  filter(!str_detect(condition, 'BL_')) %>%
-  group_by(Recording.name) %>%
-  mutate(nConditions = length(unique(condition))) %>%
-  filter(nConditions == 2)
-
-files = unique(b$Recording.name)
-nDiagnosticos = unlist(lapply(files, tagDiagnostico))
-nDiagnosticos = table(nDiagnosticos)
-
-c = b %>%
-  group_by(Recording.name) %>%
+######################
+## Cutoffs condição ##
+######################
+logFile5 = masterF %>%
+  filter(filterCutoffs == FALSE) %>%
+  filter(filterConditions == FALSE) %>%
+  group_by(Sexo, tea, Recording.name) %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
   summarise(nTrials = length(unique(Presented.Stimulus.name))) %>%
-  select(Recording.name, nTrials) %>%
-  ungroup()
-c$tea = unlist(lapply(c$Recording.name, tagDiagnostico))
-c %>%
-  group_by(tea) %>%
-  summarise(nTotal = sum(nTrials))
+  group_by(Sexo, tea) %>%
+  summarise(nTrials = sum(nTrials),
+            nParticipants = length(unique(Recording.name)))
 
-logFiles5 = data.frame(etapa = c("Cutoffs - 1 trial por condição"),
-            total = c(length(files)),
-            td = c(nDiagnosticos[[1]]),
-            tea = c(nDiagnosticos[[2]])
-)
+logFile1$stage = "raw"
+logFile2$stage = "processed"
+logFile3$stage = "anomalousVideoDuration"
+logFile4$stage = "cutoff50pct"
+logFile5$stage = "cutoffCondition"
 
-observacoes5 = c("Excluídos participantes que não têm ao menos 1 trial em cada condição. 2790 trials para TD, e 66 para TEA")
+logs = bind_rows(logFile1, logFile2, logFile3, logFile4, logFile5)
+write.csv(logs, "/Users/pdealcan/Documents/github/dataSabara/logProcessing.csv")
 
-#Merging everything
-finalLog = bind_rows(logFiles, logFiles2, logFiles3, logFiles4, logFiles5)
-print(xtable(finalLog))
-
-print(observacoes1)
-print(observacoes2)
-print(observacoes3)
-print(observacoes4)
-print(observacoes5)
+print(xtable(logs, type = "latex"))

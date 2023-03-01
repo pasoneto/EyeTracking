@@ -1,6 +1,7 @@
 source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library(data.table)
+library(ggridges)
 library(dplyr)
 
 a = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
@@ -61,3 +62,10 @@ a %>%
     geom_boxplot()+
     ylab("Proporção de fixação")+
     xlab("")
+
+a %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  group_by(condition, tea) %>%
+  summarise(pupil = mean(pupil.right + pupil.left, na.rm = TRUE))
+
+

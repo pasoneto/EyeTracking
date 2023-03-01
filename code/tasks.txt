@@ -1,9 +1,17 @@
-#Cortar todos os vídeos com duração "errada"
-#Aplicar o cutoff 50% fixações validas, em relacao ao tempo original do video.
-#Tirar criancas que nao tem pelo menos um trial em cada condicao
+#qual condicao tem mais TEA?
+#Descritiva dos participantes que sairam
 
-#Plotar distribuição do tempo total de fixação rosto, brinquedo direito/esquerdo. Mesma coisa alternância
-#Tempo_total_fixação_ROIx/tempo_total_fixação
+#Para cada etapa de processamento (Relatório 18),
+#dizer quantos trials de cada condição sairam. Separado por condicão
 
-#Comparação por autistas para thresholds (duration and proportion)
-#ANOVA em tudo
+#Reportar todos os critérios de exclusão e quantas criancas e trials sobraram para cada critério
+- filtro defeito duracao do video
+- cutoff tempo de visualização (0.5)
+- cutoff pelo menos 1 trial cada vídeo (nível de criança)
+
+Adicionar colunas para filtrar. Não filtrar nada na planilha
+
+#Descritivas de perda por genero e idade para cada etapa do processamento
+
+#Adicionar modificacoes feitas nas planilhas
+#Adicionar nova coluna: Tipico e atipico. Rodar permutações para isso também

@@ -74,10 +74,30 @@ a = a %>%
 
 #File final elaborada
 a = a %>%
-  select(Recording.name, Presented.Stimulus.name, condition, tea, target, variable, focus,
-         Recording.time.begin, Recording.time.end, Gaze.event.duration, pupil.right, pupil.left,
-         totalFixation, proportionFixation, fundoProportion, rostoProportion,
-         RD, RE, DR, ER,
-         filterDurations, filterCutoffs, filterConditions)
+  select(Recording.name, 
+         Presented.Stimulus.name, 
+         condition, 
+         tea, 
+         target, 
+         variable, 
+         focus,
+         Recording.time.begin, 
+         Recording.time.end, 
+         Gaze.event.duration, 
+         pupil.right, 
+         pupil.left,
+         totalFixation, 
+         proportionFixation, 
+         targetProportion,
+         distractorProportion,
+         fundoProportion, 
+         rostoProportion, 
+         RD, 
+         RE, 
+         DR, 
+         ER,
+         filterDurations, 
+         filterCutoffs, 
+         filterConditions)
 
 write.csv(a, "/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")

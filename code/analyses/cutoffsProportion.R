@@ -8,8 +8,8 @@ directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipantFIN
 
 setwd(directory)
 
-files = list.files()
-file_list = lapply(files, function(i){
+filesA = list.files()
+file_list = lapply(filesA, function(i){
                    a = fread(i)
                    a = a %>% select(!V1)
                    return(a)

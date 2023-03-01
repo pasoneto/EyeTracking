@@ -419,3 +419,35 @@ checkFocus = function(a){
   a$focus = focus
   return(a)
 }
+
+#Log of bulk processing
+getName = function(dataFrame){
+  a = readAndRename(dataFrame)
+  a$Recording.name = str_remove_all(a$Recording.name, "-2")
+  a$Recording.name = str_remove_all(a$Recording.name, "-3")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, "\\(")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, "\\)")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, " 1")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, " 2")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, " novo")
+  a = a %>% select(Recording.name, Presented.Stimulus.name) %>% filter(!str_detect(Presented.Stimulus.name, 'BL_'))
+  a = a %>% filter(Presented.Stimulus.name %in% trials)
+  a = a %>% group_by(Recording.name) %>% distinct(Presented.Stimulus.name)
+  return(a)
+}
+
+getName2 = function(dataFrame){
+  a = readAndRename(dataFrame)
+  a$Recording.name = str_remove_all(a$Recording.name, "-2")
+  a$Recording.name = str_remove_all(a$Recording.name, "-3")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, "\\(")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, "\\)")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, " 1")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, " 2")
+  a$Presented.Stimulus.name = str_remove_all(a$Presented.Stimulus.name, " novo")
+  a = a %>% select(Recording.name, Presented.Stimulus.name) %>% filter(!str_detect(Presented.Stimulus.name, 'BL_'))
+  a$Presented.Stimulus.name = substr(a$Presented.Stimulus.name, 1, 11)     
+  a = a %>% filter(Presented.Stimulus.name %in% trials)
+  a = a %>% group_by(Recording.name) %>% distinct(Presented.Stimulus.name)
+  return(a)
+}
