@@ -3,8 +3,7 @@ library("stringr")
 library(data.table)
 library(dplyr)
 
-#Pré processamento
-setwd("/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL")
+#Pré processamento setwd("/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL")
 
 source("/Users/pdealcan/Documents/github/sabara/code/analyses/cutoffsVideoDuration.R")
 source("/Users/pdealcan/Documents/github/sabara/code/analyses/cutoffsProportion.R")

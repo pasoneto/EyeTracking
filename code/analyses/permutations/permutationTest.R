@@ -3,6 +3,7 @@ library("stringr")
 library(data.table)
 library(dplyr)
 library(ggridges)
+library(xtable)
 
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 
@@ -99,6 +100,45 @@ samplesSet %>%
 
 ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report3/proportionsTEAandNonTD.png")
 
+permutationTest = function(dfTEA, dfNTEA, focus, conditionFilter, higher){
+  if(higher){
+    valueTEA = dfTEA %>% filter(variable == focus) %>% filter(condition == conditionFilter) %>% select(value)
+    valueTEA = valueTEA$value
+    nHigher = dfNTEA %>%
+      filter(variable == focus) %>%
+      filter(condition == conditionFilter) %>%
+      filter(value > valueTEA) %>%
+      NROW()
+    pValue = nHigher/1000
+    return(pValue)
+  } else {
+    valueTEA = dfTEA %>% filter(variable == focus) %>% filter(condition == conditionFilter) %>% select(value)
+    valueTEA = valueTEA$value
+    nHigher = dfNTEA %>%
+      filter(variable == focus) %>%
+      filter(condition == conditionFilter) %>%
+      filter(value < valueTEA) %>%
+      NROW()
+    pValue = nHigher/1000
+    return(pValue)
+  }
+}
+
+permTestResults = data.frame(condition = c(rep("RJA", 4), rep("IJA", 4)),
+                             variable = rep(c("distractorProportion", "fundoProportion", "targetProportion", "rostoProportion"), 2))
+pValuesHigher = c()
+pValuesLower = c()
+for(i in 1:NROW(permTestResults)){
+  pValuesHigher = c(pValuesHigher, permutationTest(sampleTEA, samplesSet, permTestResults$variable[i], permTestResults$condition[i], TRUE))
+  pValuesLower = c(pValuesLower, permutationTest(sampleTEA, samplesSet, permTestResults$variable[i], permTestResults$condition[i], FALSE))
+}
+
+permTestResults$pValuesHigher = pValuesHigher
+permTestResults$pValuesLower = pValuesLower
+
+print("Proportions")
+print(xtable(permTestResults, type = "latex"))
+
 samplesSet2 %>%
   ggplot(aes(x = value, fill = variable)) +
     geom_density(alpha = 0.5)+
@@ -137,3 +177,20 @@ samplesSet2 %>%
     facet_wrap(~condition+variable, scale = "free")
 
 ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report3/alternanciasBlueTEA.png")
+
+permTestResults = data.frame(condition = c(rep("RJA", 4), rep("IJA", 4)),
+                             variable = rep(c("targetRosto", "rostoTarget", "distractorRosto", "rostoDistractor"), 2))
+
+pValuesHigher = c()
+pValuesLower = c()
+for(i in 1:NROW(permTestResults)){
+  pValuesHigher = c(pValuesHigher, permutationTest(sampleTEA, samplesSet, permTestResults$variable[i], permTestResults$condition[i], TRUE))
+  pValuesLower = c(pValuesLower, permutationTest(sampleTEA, samplesSet, permTestResults$variable[i], permTestResults$condition[i], FALSE))
+}
+
+permTestResults$pValuesHigher = pValuesHigher
+permTestResults$pValuesLower = pValuesLower
+
+print("Alternations")
+print(xtable(permTestResults, type = "latex"))
+

@@ -7,3 +7,13 @@
 
 #Refazer log participantes por parte da análise
 #teste bimodalidade
+
+####
+#Age
+- Verificar idade (pegar com Victor);
+- desvio padrao idade;
+- quanto tempo antes/depois do JA foi feito o CARS? Máximo e mínimo
+
+#Condition logBulkProcess
+Add group_by(condition) para raw e processed
+#
