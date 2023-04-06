@@ -2,6 +2,7 @@ source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library(data.table)
 library(dplyr)
+library(ggridges)
 
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 
@@ -12,10 +13,12 @@ df = df %>%
     filter(filterCutoffs == FALSE) %>%
     filter(filterConditions == FALSE)
 
-dfNonTEA = df %>% filter(tea == FALSE)
-dfTEA = df %>% filter(tea == TRUE)
+dfTD = df %>% filter(tea == "TD")
+dfTEA = df %>% filter(tea == "TEA")
+dfNonTD = df %>% filter(tea == "nonTD")
 
 nTEA = length(unique(dfTEA$Recording.name))
+nNonTD = length(unique(dfNonTD$Recording.name))
 
 permutateFunction = function(df, N, analyseFunction){
   participants = unique(df$Recording.name)
@@ -47,7 +50,6 @@ computeProportions = function(df){
   return(df)
 }
 
-
 #Compute alternancias
 computeAlternancias = function(df){
   df = df %>%
@@ -70,40 +72,68 @@ computeAlternancias = function(df){
 ## Sample TEA proportions ##
 ############################
 sampleTEA = computeProportions(dfTEA)
+sampleNonTD = computeProportions(dfNonTD)
 
 samplesSet = c()
 for(k in 1:1000){
-  samplesSet[[k]] = permutateFunction(dfNonTEA, nTEA, computeProportions)
+  samplesSet[[k]] = permutateFunction(dfTD, nTEA, computeProportions)
+}
+
+samplesSet2 = c()
+for(k in 1:1000){
+  samplesSet2[[k]] = permutateFunction(dfTD, nNonTD, computeProportions)
 }
 
 samplesSet = bind_rows(samplesSet)
+samplesSet2 = bind_rows(samplesSet2)
 
-vlines = geom_vline(data=sampleTEA, aes(xintercept=value), linetype="dashed", color="blue")
+vlinesTEA = geom_vline(data=sampleTEA, aes(xintercept=value), linetype="dashed", color="blue")
+vlinesNonTD = geom_vline(data=sampleNonTD, aes(xintercept=value), linetype="dashed", color="red")
+
 samplesSet %>%
   ggplot(aes(x = value)) +
     geom_histogram()+
-    vlines+
+    vlinesTEA+ #blue
+    vlinesNonTD+ #red
     facet_wrap(~condition+variable, scale = "free")
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/report21/proportions.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report3/proportionsTEAandNonTD.png")
+
+samplesSet2 %>%
+  ggplot(aes(x = value, fill = variable)) +
+    geom_density(alpha = 0.5)+
+    facet_wrap(~condition)
+
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report3/proportionsTD.png")
+
 
 #############################
 ## Sample TEA alternâncias ##
 #############################
 sampleTEA = computeAlternancias(dfTEA)
+sampleNonTD = computeAlternancias(dfNonTD)
 
 samplesSet = c()
 for(k in 1:1000){
-  samplesSet[[k]] = permutateFunction(dfNonTEA, nTEA, computeAlternancias)
+  samplesSet[[k]] = permutateFunction(dfTD, nTEA, computeAlternancias)
+}
+
+samplesSet2 = c()
+for(k in 1:1000){
+  samplesSet2[[k]] = permutateFunction(dfTD, nNonTD, computeAlternancias)
 }
 
 samplesSet = bind_rows(samplesSet)
+samplesSet2 = bind_rows(samplesSet2)
 
-vlines = geom_vline(data=sampleTEA, aes(xintercept=value), linetype="dashed", color="blue")
-samplesSet %>%
+vlinesTEA = geom_vline(data=sampleTEA, aes(xintercept=value), linetype="dashed", color="blue")
+vlinesNonTD = geom_vline(data=sampleNonTD, aes(xintercept=value), linetype="dashed", color="red")
+
+samplesSet2 %>%
   ggplot(aes(x = value)) +
     geom_histogram()+
-    vlines+
+    vlinesTEA+
+    vlinesNonTD+
     facet_wrap(~condition+variable, scale = "free")
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/report21/alternancias.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report3/alternanciasBlueTEA.png")

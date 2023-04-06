@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage{graphicx} %package to manage images
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{float}
+\title{Relatório 20 \\ Processamento completo e dados remanescentes}
+\author{Pedro A. S. O. Neto}
+\date{Abril, 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Resultados}
+
+Etapas de pré-processamento, com o número de participantes remanescentes em cada uma delas. Dados são divididos entre Masculino/Feminino, e TEA/TD. Idade reportada em média de anos durante Joint Attention (ageJA) e durante o CARS (ageCARS).
+  \begin{table}[ht]
+  \begin{tabular}{rllrrrrll}
+    \hline
+   & sexo & tea & nTrials & nParticipants & meanAgeJA & meanAgeCARS & stage & condition \\ 
+    \hline
+  1 & F & TD & 2268 & 256 & 1.52 & 2.79 & raw &  \\ 
+    2 & F & TEA &  22 &   3 & 1.57 & 2.01 & raw &  \\ 
+    3 & F & nonTD & 156 &  18 & 1.60 & 2.82 & raw &  \\ 
+    4 & M & TD & 2446 & 275 & 1.55 & 2.63 & raw &  \\ 
+    5 & M & TEA & 308 &  38 & 2.27 & 3.06 & raw &  \\ 
+    6 & M & nonTD & 279 &  31 & 1.85 & 2.93 & raw &  \\ 
+    7 & F & TD & 2099 & 254 & 1.51 & 2.79 & processed &  \\ 
+    8 & F & TEA &  18 &   3 & 1.57 & 2.01 & processed &  \\ 
+    9 & F & nonTD & 145 &  18 & 1.60 & 2.82 & processed &  \\ 
+    10 & M & TD & 2217 & 274 & 1.56 & 2.64 & processed &  \\ 
+    11 & M & TEA & 271 &  37 & 2.24 & 3.06 & processed &  \\ 
+    12 & M & nonTD & 242 &  31 & 1.85 & 2.93 & processed &  \\ 
+    13 & F & TD & 1110 & 253 & 1.50 & 2.79 & anomVidDur & IJA \\ 
+    14 & F & TD & 834 & 249 & 1.54 & 2.81 & anomVidDur & RJA \\ 
+    15 & F & TEA &   9 &   3 & 1.57 & 2.01 & anomVidDur & IJA \\ 
+    16 & F & TEA &   6 &   2 & 1.75 & 1.53 & anomVidDur & RJA \\ 
+    17 & F & nonTD &  75 &  18 & 1.60 & 2.82 & anomVidDur & IJA \\ 
+    18 & F & nonTD &  57 &  18 & 1.60 & 2.82 & anomVidDur & RJA \\ 
+    19 & M & TD & 1225 & 284 & 1.55 & 2.63 & anomVidDur & IJA \\ 
+    20 & M & TD & 960 & 282 & 1.55 & 2.63 & anomVidDur & RJA \\ 
+    21 & M & TEA &  86 &  24 & 2.49 & 3.31 & anomVidDur & IJA \\ 
+    22 & M & TEA &  64 &  21 & 2.61 & 3.31 & anomVidDur & RJA \\ 
+    23 & M & nonTD & 108 &  28 & 1.99 & 2.96 & anomVidDur & IJA \\ 
+    24 & M & nonTD &  93 &  28 & 1.99 & 2.96 & anomVidDur & RJA \\ 
+    25 & F & TD & 644 & 217 & 1.58 & 2.86 & cutoff50pct & IJA \\ 
+    26 & F & TD & 426 & 193 & 1.58 & 2.89 & cutoff50pct & RJA \\ 
+    27 & F & TEA &   3 &   1 & 2.29 & 1.86 & cutoff50pct & IJA \\ 
+    28 & F & TEA &   3 &   1 & 2.29 & 1.86 & cutoff50pct & RJA \\ 
+    29 & F & nonTD &  45 &  15 & 1.27 & 2.61 & cutoff50pct & IJA \\ 
+    30 & F & nonTD &  36 &  15 & 1.77 & 3.15 & cutoff50pct & RJA \\ 
+    31 & M & TD & 692 & 239 & 1.62 & 2.72 & cutoff50pct & IJA \\ 
+    32 & M & TD & 510 & 220 & 1.68 & 2.74 & cutoff50pct & RJA \\ 
+    33 & M & TEA &  43 &  16 & 2.56 & 3.31 & cutoff50pct & IJA \\ 
+    34 & M & TEA &  33 &  19 & 2.52 & 3.22 & cutoff50pct & RJA \\ 
+    35 & M & nonTD &  56 &  23 & 2.10 & 3.05 & cutoff50pct & IJA \\ 
+    36 & M & nonTD &  51 &  22 & 2.03 & 3.05 & cutoff50pct & RJA \\ 
+    37 & F & TD & 583 & 184 & 1.59 & 2.91 & cutoffCondition & IJA \\ 
+    38 & F & TD & 411 & 184 & 1.59 & 2.91 & cutoffCondition & RJA \\ 
+    39 & F & TEA &   3 &   1 & 2.29 & 1.86 & cutoffCondition & IJA \\ 
+    40 & F & TEA &   3 &   1 & 2.29 & 1.86 & cutoffCondition & RJA \\ 
+    41 & F & nonTD &  41 &  13 & 1.32 & 2.94 & cutoffCondition & IJA \\ 
+    42 & F & nonTD &  33 &  13 & 1.32 & 2.94 & cutoffCondition & RJA \\ 
+    43 & M & TD & 638 & 208 & 1.67 & 2.73 & cutoffCondition & IJA \\ 
+    44 & M & TD & 494 & 208 & 1.67 & 2.73 & cutoffCondition & RJA \\ 
+    45 & M & TEA &  41 &  14 & 2.39 & 3.15 & cutoffCondition & IJA \\ 
+    46 & M & TEA &  28 &  14 & 2.39 & 3.15 & cutoffCondition & RJA \\ 
+    47 & M & nonTD &  50 &  19 & 2.04 & 3.17 & cutoffCondition & IJA \\ 
+    48 & M & nonTD &  47 &  19 & 2.04 & 3.17 & cutoffCondition & RJA \\ 
+     \hline
+  \end{tabular}
+  \end{table}
+  \subsection{Observações}
+
+\begin{itemize}
+  \item \textbf{raw} - Raw eye tracker data. 
+  \item \textbf{processed} - Excluidos participantes sem dado, ou apenas fixações unclassified/eyes not found. Alguns possuem fixações mas só durante calibração (e.g., SM462IP, SI421IP, SF226IP, MT706IP-2, MR324IP, MR313IP, FS12IP, CR632IP, CR397IP)
+  \item \textbf{anomVidDur} - Excluídas trials com duração outlier.
+  \item \textbf{cutoff50pct} - Excluídos participantes que não olharam pelo menos 50\% do tempo do vídeo para a tela.
+  \item \textbf{cutoffCondicao} - Excluídos participantes que não têm ao menos 1 trial em cada condição.
+\end{itemize}
+
+\end{document}
+

@@ -270,13 +270,33 @@ addedNames = c("Fixation.point.X", "AOI.hit..RJA_A2_B1_E...Brinquedo.Direita..1"
 colunasWithFix = c(colunas, addedNames, fundos)
 colunasWithoutFix = c(colunas, fundos)
 
+
+participantsDiagnosticos = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/participantsDiagnostico.csv")
+diagnostico = participantsDiagnosticos %>%
+  filter(Grupo == 2) %>%
+  select(Codinome) %>%
+  list()
+
+nonTD = participantsDiagnosticos %>%
+  filter(Grupo == 3) %>%
+  select(Codinome) %>%
+  list()
+
+#1 - Desenvolvimento Típico
+#2 - TEA
+#3 - Outros
 #Participantes com diagnostico tea
 tagDiagnostico = function(x){
-  diagnostico = c("FS9IP", "FS24IP", "FS65IP", "FS76IP", "FS93IP", "RP100IP", "SM114IP", "SM118IP", "MR135IP", "MR136IP", "MR140IP", "SF142IP", "SF234IP", "SF246IP", "MR281IP", "MR285IP", "MR299IP", "CR348IP", "CR356IP", "RP373IP", "SI429IP", "SI430IP", "SM462IP", "MP466IP", "CR475IP", "MR534IP", "CR559IP", "SM581IP", "MR589IP", "SI619IP", "RP657IP", "CR683IP", "MR688IP", "MR691IP", "SF728IP", "SI776IP", "SM787IP")
-  if(x %in% diagnostico){
-    return("true")
+  isTEA = any(grepl(x, diagnostico))
+  isNonTD = any(grepl(x, nonTD))
+  if(isTEA){
+    return("TEA")
   } else {
-    return("false")
+    if(isNonTD){
+      return("nonTD")
+    } else {
+      return("TD")
+    }
   }
 }
 
@@ -450,4 +470,18 @@ getName2 = function(dataFrame){
   a = a %>% filter(Presented.Stimulus.name %in% trials)
   a = a %>% group_by(Recording.name) %>% distinct(Presented.Stimulus.name)
   return(a)
+}
+
+
+#Trims videos. Receives data from output of processedParticipantAll folder,
+#and removes any fixation above "durationMax", for given video. Gaze.event.duration
+#is also fixed to reflect new duration.
+trimDurations = function(df, video, durationMax){
+  df = df %>%
+    filter(!case_when(grepl(video, Presented.Stimulus.name) ~ Recording.time.begin > durationMax,
+                      TRUE ~ Presented.Stimulus.name == "none")) %>%
+    mutate(Recording.time.end = case_when(grepl(video, Presented.Stimulus.name) & (Recording.time.end > durationMax) ~ durationMax,
+                                          TRUE ~ Recording.time.end)) %>%
+    mutate(Gaze.event.duration = Recording.time.end - Recording.time.begin)
+  return(df)
 }

@@ -69,7 +69,7 @@
     condition & \multicolumn{1}{m{10cm}|}{Condição do experimento. Pode ser RJA, IJA, ou BL\_ (Baseline). \textit{(T)}.}    \\
     \hline
     
-    tea & \multicolumn{1}{m{10cm}|}{Diagnóstico. true indica TEA, false indica TD. \textit{(P)}.}    \\
+    tea & \multicolumn{1}{m{10cm}|}{Diagnóstico. TEA, TD, ou nonTD. TD indica Tipical Development. \textit{(P)}.}    \\
     \hline
 
     target & \multicolumn{1}{m{10cm}|}{Área alvo do vídeo. Pode ser D (Brinquedo Direita), E (Brinquedo Esquerda), ou B (Baseline). \textit{(T)}.} \\
@@ -154,6 +154,21 @@
     \hline
 
     DR & \multicolumn{1}{m{10cm}|}{Número de alternâncias entre Distractor (distractor) e Rosto (R) para cada trial e participante. Alternância é considerada independente do tempo passado entre as fixações consecutivas. \textit{(T)}.}    \\
+    \hline
+
+    dataNascimento & \multicolumn{1}{m{10cm}|}{Data de nascimento \textit{(P)}.}    \\
+    \hline
+
+    pontuacaoCARS & \multicolumn{1}{m{10cm}|}{Pontuação obtida no CARS. \textit{(P)}.}    \\
+    \hline
+
+    sexo & \multicolumn{1}{m{10cm}|}{Sexo Masculino ou Feminino. \textit{(P)}.}    \\
+    \hline
+
+    ageCARS & \multicolumn{1}{m{10cm}|}{Idade do participante no dia em que foi feito o CARS (dataCARS - dataNascimento). \textit{(P)}.}    \\
+    \hline
+
+    ageJA & \multicolumn{1}{m{10cm}|}{Idade do participante no dia em que foi feito o JA (dataJA - dataNascimento). \textit{(P)}.} \\
     \hline
     
     filterDurations & \multicolumn{1}{m{10cm}|}{Filtro para vídeos com duração anômala. Duração anômala foi definida como vídeo com duração outlier. Isto é, uma duração menor ou maior do que a duração dos outros vídeos (segundo critério de $IQR*1.5$). Durações menores do que o normal são causadas por vídeos interrompidos pelo aplicador do experimento. Vídeos mais longos que o normal são devidos a problema técnico na captação do TOBII. TRUE indica vídeos que devem ser filtrados, FALSE indica vídeos que devem remanescer. \textit{(T)}.}    \\

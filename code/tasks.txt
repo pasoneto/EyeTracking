@@ -1,17 +1,9 @@
 #qual condicao tem mais TEA?
 #Descritiva dos participantes que sairam
 
-#Para cada etapa de processamento (Relatório 18),
-#dizer quantos trials de cada condição sairam. Separado por condicão
+###################################
+#Fazer grafico proporcao para cada area da tela, e diagnostico
+#Para alternancias, normalizar pela duração do vídeo
 
-#Reportar todos os critérios de exclusão e quantas criancas e trials sobraram para cada critério
-- filtro defeito duracao do video
-- cutoff tempo de visualização (0.5)
-- cutoff pelo menos 1 trial cada vídeo (nível de criança)
-
-Adicionar colunas para filtrar. Não filtrar nada na planilha
-
-#Descritivas de perda por genero e idade para cada etapa do processamento
-
-#Adicionar modificacoes feitas nas planilhas
-#Adicionar nova coluna: Tipico e atipico. Rodar permutações para isso também
+#Refazer log participantes por parte da análise
+#teste bimodalidade

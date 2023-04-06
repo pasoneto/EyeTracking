@@ -18,6 +18,7 @@ file_list = lapply(files, function(i){
             }
 )
 a = bind_rows(file_list) %>% select(!numberDuplicated)
+
 a$tea = unlist(lapply(a$Recording.name, tagDiagnostico))
 
 filterBase = paste(a$Presented.Stimulus.name, a$Recording.name, sep="")
@@ -78,6 +79,25 @@ a = a %>%
          DR = alternanciaCount(focus, "distractor", "R"),
   )
 
+infoParticipant = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/infoParticipantes.csv")
+
+##Adding aditional information about participant (CARS, idade, sexo)
+a$Recording.name = str_replace_all(a$Recording.name, "-3", "")
+a$Recording.name = str_replace_all(a$Recording.name, "-2", "")
+
+colnames(infoParticipant) = c("Recording.name", "dataNascimento", "s", "dataJA", "dataCARS", "pontuacaoCARS", "sexo", "a")
+infoParticipant = infoParticipant %>% select(Recording.name, dataNascimento, pontuacaoCARS, dataJA, dataCARS, sexo)
+
+a = merge(a, infoParticipant, by = "Recording.name", all = FALSE)
+
+a$dataNascimento <- as.Date(a$dataNascimento, "%m/%d/%Y")
+a$dataCARS <- as.Date(a$dataCARS, "%d/%m/%y")
+a$dataJA <- as.Date(a$dataJA, "%d/%m/%y")
+
+a$ageJA <- a$dataJA - a$dataNascimento
+a$ageCARS <- a$dataCARS - a$dataNascimento
+
+
 #File final elaborada
 a = a %>%
   select(Recording.name, 
@@ -106,6 +126,11 @@ a = a %>%
          TR,
          RD,
          DR,
+         dataNascimento,
+         pontuacaoCARS,
+         sexo,
+         ageCARS,
+         ageJA,
          filterDurations, 
          filterCutoffs, 
          filterConditions)

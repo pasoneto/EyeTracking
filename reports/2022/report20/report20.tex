@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{graphicx} %package to manage images
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{float}
+\title{Relatório 20 \\ Processamento completo e dados remanescentes}
+\author{Pedro A. S. O. Neto}
+\date{Março, 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Resultados}
+
+São reportadas todas as etapas de pré-processamento, com o número de participantes remanescentes em cada uma delas. Dados são divididos entre Masculino/Feminino, e TEA/TD.
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrrll}
+  \hline
+ & Sexo & tea & nTrials & nParticipants & stage & condition \\ 
+  \hline
+1 & F & FALSE & 2442 & 276 & raw &  \\ 
+  2 & F & TRUE &  22 &   3 & raw &  \\ 
+  3 & M & FALSE & 2791 & 314 & raw &  \\ 
+  4 & M & TRUE & 260 &  32 & raw &  \\ 
+  5 & F & FALSE & 2260 & 274 & processed &  \\ 
+  6 & F & TRUE &  18 &   3 & processed &  \\ 
+  7 & M & FALSE & 2519 & 313 & processed &  \\ 
+  8 & M & TRUE & 229 &  31 & processed &  \\ 
+  9 & F & FALSE & 1193 & 273 & anomalousVideoDuration & IJA \\ 
+  10 & F & FALSE & 899 & 269 & anomalousVideoDuration & RJA \\ 
+  11 & F & TRUE &   9 &   3 & anomalousVideoDuration & IJA \\ 
+  12 & F & TRUE &   6 &   2 & anomalousVideoDuration & RJA \\ 
+  13 & M & FALSE & 1317 & 308 & anomalousVideoDuration & IJA \\ 
+  14 & M & FALSE & 1039 & 305 & anomalousVideoDuration & RJA \\ 
+  15 & M & TRUE & 111 &  30 & anomalousVideoDuration & IJA \\ 
+  16 & M & TRUE &  88 &  28 & anomalousVideoDuration & RJA \\ 
+  17 & F & FALSE & 696 & 234 & cutoff50pct & IJA \\ 
+  18 & F & FALSE & 467 & 210 & cutoff50pct & RJA \\ 
+  19 & F & TRUE &   3 &   1 & cutoff50pct & IJA \\ 
+  20 & F & TRUE &   3 &   1 & cutoff50pct & RJA \\ 
+  21 & M & FALSE & 748 & 260 & cutoff50pct & IJA \\ 
+  22 & M & FALSE & 557 & 240 & cutoff50pct & RJA \\ 
+  23 & M & TRUE &  51 &  20 & cutoff50pct & IJA \\ 
+  24 & M & TRUE &  46 &  24 & cutoff50pct & RJA \\ 
+  25 & F & FALSE & 631 & 199 & cutoffCondition & IJA \\ 
+  26 & F & FALSE & 449 & 199 & cutoffCondition & RJA \\ 
+  27 & F & TRUE &   3 &   1 & cutoffCondition & IJA \\ 
+  28 & F & TRUE &   3 &   1 & cutoffCondition & RJA \\ 
+  29 & M & FALSE & 689 & 226 & cutoffCondition & IJA \\ 
+  30 & M & FALSE & 537 & 226 & cutoffCondition & RJA \\ 
+  31 & M & TRUE &  48 &  17 & cutoffCondition & IJA \\ 
+  32 & M & TRUE &  39 &  17 & cutoffCondition & RJA \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\subsection{Observações}
+
+\begin{itemize}
+  \item \textbf{raw} - Raw eye tracker data. 
+  \item \textbf{processed} - Excluidos participantes sem dado, ou apenas fixações unclassified/eyes not found. Alguns possuem fixações mas só durante calibração (e.g., SM462IP, SI421IP, SF226IP, MT706IP-2, MR324IP, MR313IP, FS12IP, CR632IP, CR397IP)
+  \item \textbf{anomalousVideoDuration} - Excluídas trials com duração outlier.
+  \item \textbf{cutoff50pct} - Excluídos participantes que não olharam pelo menos 50\% do tempo do vídeo para a tela.
+  \item \textbf{cutoffCondicao} - Excluídos participantes que não têm ao menos 1 trial em cada condição.
+\end{itemize}
+
+\end{document}
+
