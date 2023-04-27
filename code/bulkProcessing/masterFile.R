@@ -78,24 +78,27 @@ a = a %>%
          DR = alternanciaCount(focus, "distractor", "R"),
   )
 
-infoParticipant = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/infoParticipantes.csv")
+infoParticipant = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/infoParticipants.csv")
+
+infoParticipant = infoParticipant %>% select(Codinome, `Data de Nascimento`, `Data CARS`, `JA data`, `Pont. CARS`, `GeoPref data`, Sexo2) 
+colnames(infoParticipant) = c("Recording.name", "dataNascimento", "dataCARS", "dataJA", "pontuacaoCARS", "dataGeo", "sexo") 
+
+a = merge(a, infoParticipant, by = "Recording.name", all = FALSE)
 
 ##Adding aditional information about participant (CARS, idade, sexo)
 a$Recording.name = str_replace_all(a$Recording.name, "-3", "")
 a$Recording.name = str_replace_all(a$Recording.name, "-2", "")
 
-colnames(infoParticipant) = c("Recording.name", "dataNascimento", "s", "dataJA", "dataCARS", "pontuacaoCARS", "sexo", "a")
-infoParticipant = infoParticipant %>% select(Recording.name, dataNascimento, pontuacaoCARS, dataJA, dataCARS, sexo)
+a$tea = unlist(lapply(a$Recording.name, tagDiagnostico))
 
-a = merge(a, infoParticipant, by = "Recording.name", all = FALSE)
-
-a$dataNascimento <- as.Date(a$dataNascimento, "%m/%d/%Y")
-a$dataCARS <- as.Date(a$dataCARS, "%d/%m/%y")
-a$dataJA <- as.Date(a$dataJA, "%d/%m/%y")
+a$dataNascimento <- as.Date(a$dataNascimento, "%d/%m/%Y")
+a$dataCARS <- as.Date(a$dataCARS, "%d/%m/%Y")
+a$dataJA <- as.Date(a$dataJA, "%d/%m/%Y")
 
 a$ageJA <- a$dataJA - a$dataNascimento
 a$ageCARS <- a$dataCARS - a$dataNascimento
 
+a$timeBetweenJAandCARS <- abs(a$dataCARS - a$dataJA)
 
 #File final elaborada
 a = a %>%
@@ -130,6 +133,7 @@ a = a %>%
          sexo,
          ageCARS,
          ageJA,
+         timeBetweenJAandCARS,
          filterDurations, 
          filterCutoffs, 
          filterConditions)

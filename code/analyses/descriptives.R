@@ -6,25 +6,28 @@ library(ggridges)
 
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 
+df %>%
+  distinct(Recording.name, .keep_all = TRUE) %>%
+  summarise(minTimeJACARS = min(timeBetweenJAandCARS, na.rm = TRUE),
+            maxTimeJACARS = max(timeBetweenJAandCARS, na.rm = TRUE),
+            timeBetweenJAandCARS = mean(timeBetweenJAandCARS, na.rm = TRUE))
+
+df %>%
+  filter(timeBetweenJAandCARS == 849) %>%
+  select(Recording.name)
+
+df %>% 
+  distinct(Recording.name, .keep_all = TRUE) %>%
+  filter(timeBetweenJAandCARS == 323) %>% select(Recording.name)
 #Primeiro são filtrados os participantes conforme o critério de inclusão
-df = df %>%
+dfFiltered = df %>%
     filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
     filter(filterDurations == FALSE) %>%
     filter(filterCutoffs == FALSE) %>%
     filter(filterConditions == FALSE)
 
-df = df %>%
-  group_by(Recording.name, Presented.Stimulus.name, condition, tea) %>%
-  summarise(distractorProportion = unique(distractorProportion),
-            fundoProportion = unique(fundoProportion), 
-            targetProportion = unique(targetProportion), 
-            rostoProportion = unique(rostoProportion)) %>%
-  group_by(condition, tea) %>%
-  melt(id.vars = c("condition", "tea", "Recording.name", "Presented.Stimulus.name"))
 
-df %>%
-  filter(tea != "nonTD") %>%
-  ggplot(aes(x = value, y = tea, fill = tea)) +
-    geom_density_ridges(scale = 5, alpha = 0.5)+
-    facet_wrap(~variable+condition, scale = "free")
-
+dfSummarise = function(df){
+  df %>%
+      
+}

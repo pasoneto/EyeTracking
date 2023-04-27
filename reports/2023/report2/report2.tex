@@ -170,7 +170,10 @@
 
     ageJA & \multicolumn{1}{m{10cm}|}{Idade do participante no dia em que foi feito o JA (dataJA - dataNascimento). \textit{(P)}.} \\
     \hline
-    
+
+    timeBetweenJAandCARS & \multicolumn{1}{m{10cm}|}{Dias entre administração do JA e do CARS (|dataJA - dataNascimento|). \textit{(P)}.} \\
+    \hline
+
     filterDurations & \multicolumn{1}{m{10cm}|}{Filtro para vídeos com duração anômala. Duração anômala foi definida como vídeo com duração outlier. Isto é, uma duração menor ou maior do que a duração dos outros vídeos (segundo critério de $IQR*1.5$). Durações menores do que o normal são causadas por vídeos interrompidos pelo aplicador do experimento. Vídeos mais longos que o normal são devidos a problema técnico na captação do TOBII. TRUE indica vídeos que devem ser filtrados, FALSE indica vídeos que devem remanescer. \textit{(T)}.}    \\
     \hline
     

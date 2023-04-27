@@ -16,4 +16,7 @@
 
 #Condition logBulkProcess
 Add group_by(condition) para raw e processed
+
 #
+
+
