@@ -11,11 +11,10 @@ df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.cs
 #Primeiro são filtrados os participantes conforme o critério de inclusão
 dfF = df %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
-  filter(condition == "RJA") %>%
   filter(filterDurations == FALSE) %>%
   filter(filterCutoffs == FALSE) %>%
   filter(filterConditions == FALSE) %>%
-  group_by(Recording.name, tea) %>%
+  group_by(Recording.name, tea, condition) %>%
   summarise(Gaze.event.durationSD = mean(Gaze.event.duration),
             totalFixationSD = mean(totalFixation), #tirar
             proportionFixationSD = mean(proportionFixation),
@@ -55,8 +54,11 @@ dfF = df %>%
             rostoProportion = mean(rostoProportion),
             RT = mean(RT), #weighted alternancias
             TR = mean(TR)) %>%
-  melt(id.vars = c("Recording.name", "tea")) %>%
+  melt(id.vars = c("Recording.name", "tea", "condition")) %>%
   dcast(Recording.name+tea ~ variable)
+
+dfF %>%
+  arrange(Recording.name)
 
 runForest = function(df, nRuns){
   testResults = c()

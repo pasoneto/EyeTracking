@@ -36,6 +36,7 @@ ageSummary = infoParticipant %>%
             meanAgeJA = mean(ageJA, na.rm = TRUE)/365,
             meanAgeCARS = mean(ageCARS, na.rm = TRUE)/365,
             meanTimeJAandCARS = mean(timeBetweenJAandCARS, na.rm = TRUE),
+            sdTimeJAandCARS = sd(timeBetweenJAandCARS, na.rm = TRUE),
             maxTimeJAandCARS = max(timeBetweenJAandCARS, na.rm = TRUE),
             minTimeJAandCARS = min(timeBetweenJAandCARS, na.rm = TRUE)) %>%
 t()

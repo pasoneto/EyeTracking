@@ -18,6 +18,8 @@ dfTD = df %>% filter(tea == "TD")
 dfTEA = df %>% filter(tea == "TEA")
 dfNonTD = df %>% filter(tea == "nonTD")
 
+length(unique(dfTEA$Recording.name))
+
 nTEA = length(unique(dfTEA$Recording.name))
 nNonTD = length(unique(dfNonTD$Recording.name))
 
