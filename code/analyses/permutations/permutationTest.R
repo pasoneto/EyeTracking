@@ -14,6 +14,7 @@ df = df %>%
     filter(filterCutoffs == FALSE) %>%
     filter(filterConditions == FALSE)
 
+
 dfTD = df %>% filter(tea == "TD")
 dfTEA = df %>% filter(tea == "TEA")
 dfNonTD = df %>% filter(tea == "nonTD")
@@ -76,6 +77,9 @@ computeAlternancias = function(df){
 ############################
 sampleTEA = computeProportions(dfTEA)
 sampleNonTD = computeProportions(dfNonTD)
+
+library(coin)
+independence_test(y ~ tr, alternative = "greater")
 
 samplesSet = c()
 for(k in 1:1000){
