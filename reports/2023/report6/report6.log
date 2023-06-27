@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.9.20)  27 JUN 2023 13:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.9.20)  27 JUN 2023 13:29
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -346,4 +346,59 @@ l.128
        <./teaVariableAlternancia.png>]
 <./variableProportion.png, id=69, 2106.87125pt x 2106.87125pt>
 File: ./variableProportion.png Graphic file (type png)
-<use ./variabl
+<use ./variableProportion.png>
+Package pdftex.def Info: ./variableProportion.png  used on input line 131.
+(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
+ [7pdfTeX warning (ext4): destination with the same identifier (name{table.4}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.134 
+      ]
+<./conditionVariableProportion.png, id=76, 2106.87125pt x 2106.87125pt>
+File: ./conditionVariableProportion.png Graphic file (type png)
+<use ./conditionVariableProportion.png>
+Package pdftex.def Info: ./conditionVariableProportion.png  used on input line 137.
+(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
+ [8pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.140 
+       <./variableProportion.png>]
+<./teaVariableProportion.png, id=83, 2106.87125pt x 2106.87125pt>
+File: ./teaVariableProportion.png Graphic file (type png)
+<use ./teaVariableProportion.png>
+Package pdftex.def Info: ./teaVariableProportion.png  used on input line 143.
+(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
+ [9pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.146 
+       <./conditionVariableProportion.png>]
+Overfull \hbox (26.36253pt too wide) in paragraph at lines 147--148
+\OT1/cmr/m/n/10 met-ric Causal In-fer-ence. Jour-nal of Sta-tis-ti-cal Soft-ware, 42(8), 1{28. https://doi.org/10.18637/jss.v042.i08 
+ []
+
+[10pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.149 \end{document}
+                     <./teaVariableProportion.png>] (./report6.aux)
+Package rerunfilecheck Info: File `report6.out' has not changed.
+(rerunfilecheck)             Checksum: CFD2AD8EDFF3ABD98811BE2FECB4E6D3;509.
+ ) 
+Here is how much of TeX's memory you used:
+ 8366 strings out of 478994
+ 125109 string characters out of 5858184
+ 435713 words of memory out of 5000000
+ 25727 multiletter control sequences out of 15000+600000
+ 407377 words of font info for 40 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 71i,9n,74p,342b,324s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on report6.pdf (10 pages, 610396 bytes).
+PDF statistics:
+ 122 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
+ 27 named destinations out of 1000 (max. 500000)
+ 73 words of extra memory for PDF output out of 10000 (max. 10000000)
+
