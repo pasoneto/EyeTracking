@@ -4,7 +4,6 @@ library(data.table)
 library(dplyr)
 library(ggridges)
 library(xtable)
-
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 
 #Primeiro são filtrados os participantes conforme o critério de inclusão
@@ -13,6 +12,22 @@ df = df %>%
     filter(filterDurations == FALSE) %>%
     filter(filterCutoffs == FALSE) %>%
     filter(filterConditions == FALSE)
+
+df %>%
+  select(Recording.name, sexo, tea) %>%
+  distinct() %>%
+  group_by(sexo) %>%
+  filter(tea == "TD") %>%
+  summarise(length(Recording.name))
+
+175+196
+
+
+#Fetching matched samples
+source("./matchedSample.R")
+matchedParticipants = subSample
+df = df %>%
+  filter(Recording.name %in% matchedParticipants)
 
 #Compute alternancias
 computeAlternancias = function(df){
@@ -45,7 +60,7 @@ df %>%
     geom_point()+
     geom_errorbar(aes(ymin = mean-stder, ymax = mean+stder))
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report5/teaMainAlternancia.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/teaMainAlternancia.png")
 
 #Visualizing effect of variable
 df %>%
@@ -56,7 +71,7 @@ df %>%
     geom_point()+
     geom_errorbar(aes(ymin = mean-stder, ymax = mean+stder))
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report5/variableAlternancia.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/variableAlternancia.png")
 
 #Visualizing effect of condition
 df %>%
@@ -67,7 +82,7 @@ df %>%
     geom_point()+
     geom_errorbar(aes(ymin = mean-stder, ymax = mean+stder))
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report5/conditionAlternancia.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/conditionAlternancia.png")
 
 #Visualizing interaction of condition and variable
 df %>%
@@ -79,7 +94,7 @@ df %>%
     geom_point()+
     geom_errorbar(aes(ymin = mean-stder, ymax = mean+stder))
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report5/conditionVariableAlternancia.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/conditionVariableAlternancia.png")
 #Visualizing interaction between tea and variable
 df %>%
   group_by(tea, variable) %>%
@@ -90,7 +105,7 @@ df %>%
     geom_point()+
     geom_errorbar(aes(ymin = mean-stder, ymax = mean+stder))
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report5/teaVariableAlternancia.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/teaVariableAlternancia.png")
 
 #Compute proportions
 computeProportions = function(df){
@@ -117,6 +132,9 @@ df = df %>%
     filter(filterConditions == FALSE) %>%
     filter(tea != "nonTD")
 
+df = df %>%
+  filter(Recording.name %in% matchedParticipants)
+
 df = computeProportions(df)
 aovResult <- aov(value ~ condition*tea*variable, data = df)
 summary(aovResult)
@@ -131,7 +149,7 @@ df %>%
     geom_point()+
     geom_errorbar(aes(ymin = mean-stder, ymax = mean+stder))
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report5/variableProportion.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/variableProportion.png")
 
 #Visualizing interaction between condition and variable 
 df %>%
@@ -143,7 +161,7 @@ df %>%
     geom_point()+
     geom_errorbar(aes(ymin = mean-stder, ymax = mean+stder))
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report5/conditionVariableProportion.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/conditionVariableProportion.png")
 #Visualizing interaction between tea and variable 
 df %>%
   group_by(tea, variable) %>%
@@ -154,4 +172,4 @@ df %>%
     geom_point()+
     geom_errorbar(aes(ymin = mean-stder, ymax = mean+stder))
 
-ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report5/teaVariableProportion.png")
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/teaVariableProportion.png")
