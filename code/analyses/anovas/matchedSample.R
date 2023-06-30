@@ -6,6 +6,8 @@ library(ggridges)
 library(xtable)
 library(MatchIt)
 
+set.seed(1000)
+
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 
 #Primeiro são filtrados os participantes conforme o critério de inclusão
@@ -14,8 +16,7 @@ df = df %>%
     filter(filterDurations == FALSE) %>%
     filter(filterCutoffs == FALSE) %>%
     filter(filterConditions == FALSE) %>%
-    filter(tea != "nonTD") %>%
-    filter(Recording.name != "SM198IP")
+    filter(tea != "nonTD")
 
 subSample = df %>%
   select(Recording.name, ageJA, sexo, tea) %>%
@@ -26,7 +27,9 @@ nonMatchedStatistic = subSample %>%
   group_by(tea) %>%
   summarise(meanAge = mean(ageJA)/365,
             sdAge = sd(ageJA)/365,
-            N = length(ageJA))
+            N = length(ageJA),
+            minAge = min(ageJA),
+            maxAge = max(ageJA))
 
 subSample = matchit(as.factor(tea)~ageJA+as.factor(sexo), 
                     data=subSample, 
@@ -36,12 +39,11 @@ subSample = matchit(as.factor(tea)~ageJA+as.factor(sexo),
 subSample = match.data(subSample)
 
 dStatistic = subSample %>%
-  group_by(tea) %>%
+  group_by(tea, sexo) %>%
   summarise(meanAge = mean(ageJA)/365,
             sdAge = sd(ageJA)/365,
-            N = length(ageJA),
-            maxAge = max(ageJA)/365,
-            minAge = min(ageJA)/365)
+            minAge = min(ageJA)/365,
+            maxAge = max(ageJA)/365)
 
 print(xtable(nonMatchedStatistic, type = "latex"))
 print(xtable(dStatistic, type = "latex"))

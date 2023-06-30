@@ -20,8 +20,6 @@ df %>%
   filter(tea == "TD") %>%
   summarise(length(Recording.name))
 
-175+196
-
 
 #Fetching matched samples
 source("./matchedSample.R")
@@ -63,7 +61,7 @@ df %>%
 ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report6/teaMainAlternancia.png")
 
 #Visualizing effect of variable
-df %>%
+unique(df$variable) %>%
   group_by(variable) %>%
   summarise(mean = mean(value),
             stder = sd(value)/sqrt(length(value))) %>%
