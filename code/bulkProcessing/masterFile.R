@@ -80,8 +80,7 @@ a = a %>%
 
 infoParticipant = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/infoParticipants.csv")
 
-
-infoParticipant = infoParticipant %>% select(Codinome, `Data de Nascimento`, `Data CARS`, `JA data`, `Pont. CARS`, `GeoPref data`, Sexo2) 
+infoParticipant = infoParticipant %>% select(Codinome, `Data de Nascimento`, `Data CARS`, `JA data`, `Pont. CARS`, `GeoPref data`, Sexo) 
 colnames(infoParticipant) = c("Recording.name", "dataNascimento", "dataCARS", "dataJA", "pontuacaoCARS", "dataGeo", "sexo") 
 
 a = merge(a, infoParticipant, by = "Recording.name", all = FALSE)

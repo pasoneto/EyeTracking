@@ -485,3 +485,36 @@ trimDurations = function(df, video, durationMax){
     mutate(Gaze.event.duration = Recording.time.end - Recording.time.begin)
   return(df)
 }
+
+
+#Compute proportions
+computeProportions = function(df){
+  df = df %>%
+    group_by(Recording.name, Presented.Stimulus.name, condition, tea) %>%
+    summarise(distractorProportion = unique(distractorProportion),
+              fundoProportion = unique(fundoProportion), 
+              targetProportion = unique(targetProportion), 
+              rostoProportion = unique(rostoProportion)) %>%
+    group_by(Recording.name, condition, tea) %>%
+    summarise(distractorProportion = mean(distractorProportion),
+              fundoProportion = mean(fundoProportion), 
+              targetProportion = mean(targetProportion), 
+              rostoProportion = mean(rostoProportion)) %>%
+    melt(id.vars = c("condition", "tea", "Recording.name"))
+  return(df)
+}
+
+#Compute alternancias
+computeAlternancias = function(df){
+  df = df %>%
+    filter(tea != "nonTD") %>%
+    group_by(Recording.name, condition, tea) %>%
+    #Needs to be mean because if I sum up the number of alternancias, results will be biased towards TD, which is more numerous than TEA.
+    #All participants same number of conditions (2)
+    summarise(targetRosto = mean(TR),
+              rostoTarget = mean(RT), 
+              distractorRosto = mean(DR), 
+              rostoDistractor = mean(RD)) %>%
+    melt(id.vars = c("condition", "Recording.name", "tea"))
+  return(df)
+}

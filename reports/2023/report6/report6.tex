@@ -20,33 +20,32 @@ There were notable discrepancies in age between our original samples of TD and T
 To address this issue, we employed a matching algorithm suggested by Ho, Imai, King \& Stuart (2011), which minimized the Euclidean distance based on participants' sex and age. Following the matching process, our final sample consisted of 15 participants from each diagnostic group (refer to Table X for descriptive statistics).
 
 \begin{table}[H]
-\parbox{.45\linewidth}{
-\centering
-\begin{tabular}{cccc}
-\hline
-    tea & meanAge & sdAge & N \\ 
-    \hline
-    TD & 2.87 & 1.04 & 358 \\ 
-    TEA & 3.06 & 0.79 &  15 \\ 
-\hline
-\end{tabular}
 \caption{Non matched}
-}
-\hfill
-\parbox{.45\linewidth}{
 \centering
-\begin{tabular}{cccc}
-\hline
-   tea & meanAge & sdAge & N  \\ 
+\begin{tabular}{rlrrrrr}
     \hline
-    TD & 3.05 & 0.78 &  15 \\ 
-    TEA & 3.06 & 0.79 & 15 \\ 
-\hline
+    & tea & meanAge & sdAge & N & minAge & maxAge \\ 
+    \hline
+    1 & TD & 2.90 & 1.02 & 359 & 231 & 1700 \\ 
+    2 & TEA & 3.06 & 0.79 &  15 & 759 & 1716 \\ 
+   \hline
 \end{tabular}
-\caption{Matched}
-}
 \end{table}
 
+\begin{table}[H]
+\caption{Matched}
+\centering
+\begin{tabular}{rllrrrr}
+  \hline
+  & tea & sexo & meanAge & sdAge & minAge & maxAge \\ 
+  \hline
+  1 & TD & F & 2.08 &  & 2.08 & 2.08 \\ 
+  2 & TD & M & 3.13 & 0.77 & 2.21 & 4.66 \\ 
+  3 & TEA & F & 2.08 &  & 2.08 & 2.08 \\ 
+  4 & TEA & M & 3.13 & 0.77 & 2.21 & 4.70 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
 \section{ANOVA}
 
@@ -57,23 +56,21 @@ Same analysis as report 5, but with matched samples. Main effects and interactio
 
 \begin{table}[H]
 \centering
-\caption{Alternancias}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrrr}
   \hline
- & Df & Sum Sq & Mean Sq & F value & Pr($>$F) & \\ 
+ & Df & Sum Sq & Mean Sq & F value & Pr($>$F) \\ 
   \hline
-  condition              & 1 & 2.30 & 2.30 & 8.71 & 0.0035 & **\\ 
-  tea                    & 1 & 1.68 & 1.68 & 6.37 & 0.0123 & *\\ 
-  variable               & 3 & 25.16 & 8.39 & 31.80 & 0.00 & ***\\ 
-  condition:tea          & 1 & 0.01 & 0.01 & 0.02 & 0.8809 & \\ 
-  condition:variable     & 3 & 4.89 & 1.63 & 6.17 & 0.0005 & ***\\ 
-  tea:variable           & 3 & 0.43 & 0.14 & 0.54 & 0.6544 & \\ 
-  condition:tea:variable & 3 & 0.30 & 0.10 & 0.38 & 0.7711 & \\ 
-  Residuals              & 224 & 59.09 & 0.26 &  &  & \\ 
+  condition              & 1 & 3.24 & 3.24 & 13.55 & 0.0003 ***\\ 
+  tea                    & 1 & 1.18 & 1.18 & 4.93 & 0.0273 *\\ 
+  variable               & 3 & 23.48 & 7.83 & 32.72 & 0.0000 ***\\ 
+  condition:tea          & 1 & 0.13 & 0.13 & 0.55 & 0.4597 \\ 
+  condition:variable     & 3 & 5.82 & 1.94 & 8.11 & 0.0000 *\\ 
+  tea:variable           & 3 & 0.41 & 0.14 & 0.57 & 0.6364 \\ 
+  condition:tea:variable & 3 & 0.56 & 0.19 & 0.78 & 0.5083 \\ 
+  Residuals              & 224 & 53.58 & 0.24 &  &  \\ 
    \hline
 \end{tabular}
 \end{table}
-
 
 \begin{figure}[H]
   \caption{Visualizing TEA effect on alternancias. Mean number of alternancias per tea and trial.}
@@ -109,22 +106,22 @@ Same analysis as report 5, but with matched samples. Main effects and interactio
 
 \begin{table}[H]
 \centering
-\caption{Proportion fixation}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrrrrr}
   \hline
- & Df & Sum Sq & Mean Sq & F value & Pr($>$F) & \\ 
+ & Df & Sum Sq & Mean Sq & F value & Pr($>$F) \\ 
   \hline
-  condition              & 1 & 0.00 & 0.00 & 0.00 & 1.0000 & \\ 
-  tea                    & 1 & 0.00 & 0.00 & 0.00 & 1.0000 & \\ 
-  variable               & 3 & 6.37 & 2.12 & 67.56 & 0.0000 & ***\\ 
-  condition:tea          & 1 & 0.00 & 0.00 & 0.00 & 1.0000 & \\ 
-  condition:variable     & 3 & 1.82 & 0.61 & 19.30 & 0.0000 & ***\\ 
-  tea:variable           & 3 & 0.63 & 0.21 & 6.69 & 0.0002 & ***\\ 
-  condition:tea:variable & 3 & 0.17 & 0.06 & 1.85 & 0.1387 & \\ 
-  Residuals              & 224 & 7.04 & 0.03 &  & & \\ 
+condition              & 1 & 0.00 & 0.00 & 0.00 & 1.0000 \\ 
+  tea                    & 1 & 0.00 & 0.00 & 0.00 & 1.0000 \\ 
+  variable               & 3 & 6.17 & 2.06 & 64.36 & 0.0000 ***\\ 
+  condition:tea          & 1 & 0.00 & 0.00 & 0.00 & 1.0000 \\ 
+  condition:variable     & 3 & 1.74 & 0.58 & 18.15 & 0.0000 ***\\ 
+  tea:variable           & 3 & 0.55 & 0.18 & 5.78 & 0.0008 ***\\ 
+  condition:tea:variable & 3 & 0.14 & 0.05 & 1.45 & 0.2280 \\ 
+  Residuals              & 224 & 7.16 & 0.03 &  &  \\ 
    \hline
 \end{tabular}
 \end{table}
+
 
 \begin{figure}[H]
   \caption{Visualizing variable effect}
