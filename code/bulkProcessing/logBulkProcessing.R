@@ -8,11 +8,14 @@ library(xtable)
 
 #General info about all participants
 infoParticipant = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/infoParticipants.csv")
-infoParticipant = infoParticipant %>% select(Codinome, `Data de Nascimento`, `Data CARS`, `JA data`, `Pont. CARS`, `GeoPref data`, Sexo2) 
+infoParticipant = infoParticipant %>% select(Codinome, `Data de Nascimento`, `Data CARS`, `JA data`, `Pont. CARS`, `GeoPref data`, Sexo) 
 colnames(infoParticipant) = c("Recording.name", "dataNascimento", "dataCARS", "dataJA", "pontuacaoCARS", "dataGeo", "sexo") 
 infoParticipant = infoParticipant %>% filter(sexo != "")
 
 infoParticipant$tea = unlist(lapply(infoParticipant$Recording.name, tagDiagnostico))
+
+infoParticipant = infoParticipant %>%
+  filter(!dataJA %in% c("Transferido", "-", "Faltou", "nova", "NAN", "atestado", "remoto", "nan", "N\xe3o fez"))
 
 infoParticipant$dataNascimento <- as.Date(infoParticipant$dataNascimento, "%d/%m/%Y")
 infoParticipant$dataCARS <- as.Date(infoParticipant$dataCARS, "%d/%m/%Y")
@@ -65,12 +68,12 @@ allRaw = merge(allRaw, infoParticipant, by.x = "Recording.name", by.y = "Recordi
 allRaw$condition = substr(allRaw$Presented.Stimulus.name, 1, 3) #Adding condition back
 
 logFile1 = allRaw %>%
-  group_by(sexo, tea, Recording.name, condition) %>%
+  group_by(sexo, tea, Recording.name) %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
   summarise(nTrials = length(unique(Presented.Stimulus.name)),
             ageJA = unique(ageJA),
             ageCARS = unique(ageCARS)) %>%
-  group_by(sexo, tea, condition) %>%
+  group_by(sexo, tea) %>%
   summarise(nTrials = sum(nTrials),
             nParticipants = length(unique(Recording.name)),
             meanAgeJA = mean(ageJA, na.rm = TRUE)/365,

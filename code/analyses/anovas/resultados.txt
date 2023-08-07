@@ -1,0 +1,9 @@
+- Mantem resultados ANOVA; 
+- Mencionar que Matched samples dá o mesmo; Mantem anaslises pra matched samples.
+- Fazer plots para matched samples e não matched samples; 
+- Adicionar terceiro grupo (só ROC curve);
+- Especificidade e sensibilidade;
+- Mesmo que interação tripla não encontrada, 
+  análise exploratória mostra que fundoProportion,
+  targetProportion, rostoTarget, targetRosto são interessantes diferenciadoras.
+- Outra evidência é que a ROC curve separa bem os grupos;

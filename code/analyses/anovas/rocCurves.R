@@ -8,36 +8,26 @@ library(dplyr)
 library(ggridges)
 library(xtable)
 
-#Compute proportions
-computeProportions = function(df){
-  df = df %>%
-    group_by(Recording.name, Presented.Stimulus.name, condition, tea) %>%
-    summarise(distractorProportion = unique(distractorProportion),
-              fundoProportion = unique(fundoProportion), 
-              targetProportion = unique(targetProportion), 
-              rostoProportion = unique(rostoProportion)) %>%
-    group_by(Recording.name, condition, tea) %>%
-    summarise(distractorProportion = mean(distractorProportion),
-              fundoProportion = mean(fundoProportion), 
-              targetProportion = mean(targetProportion), 
-              rostoProportion = mean(rostoProportion)) %>%
-    melt(id.vars = c("condition", "tea", "Recording.name"))
-  return(df)
+#Mantem AOI, colapsa por condição, soma por variable
+rocPlotter = function(df, AOI, condition, plot = FALSE){
+  runCondition = is.character(condition)
+  if(runCondition){
+    df = df %>%
+      group_by(variable, Recording.name, tea, condition) %>%
+      summarise(value = mean(value)) %>%
+      filter(variable == AOI) %>%
+      filter(condition == condition)
+
+  } else{
+    df = df %>%
+      group_by(variable, Recording.name, tea) %>%
+      summarise(value = mean(value)) %>%
+      filter(variable == AOI)
+  }
+  return(roc(df$tea, df$value, plot = plot))
 }
 
-#Non matched
-df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
-df = df %>%
-    filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
-    filter(filterDurations == FALSE) %>%
-    filter(filterCutoffs == FALSE) %>%
-    filter(filterConditions == FALSE) %>%
-    filter(tea != "nonTD")
-
-df = computeProportions(df)
-plot(roc(df$tea, df$value)) #0.5
-
-#Matched
+#Alternancia Matched
 source("./matchedSample.R")
 matchedParticipants = subSample
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
@@ -50,10 +40,17 @@ df = df %>%
     filter(Recording.name %in% matchedParticipants)
 
 df = computeProportions(df)
-plot(roc(df$tea, df$value)) #0.52
 
+df = df %>% 
+  filter(variable %in% c("fundoProportion", "targetProportion")) %>%
+  group_by(variable, Recording.name, tea) %>%
+  summarise(value = mean(value)) %>%
+  arrange(Recording.name)
 
-#Alternancias
+matchedA = rocPlotter(df, "fundoProportion", FALSE, TRUE) #0.73
+matchedB = rocPlotter(df, "targetProportion", FALSE, TRUE) #79
+
+#Proportion non matched
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 df = df %>%
     filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
@@ -62,27 +59,40 @@ df = df %>%
     filter(filterConditions == FALSE) %>%
     filter(tea != "nonTD")
 
-computeAlternancias = function(df){
-  df = df %>%
-    filter(tea != "nonTD") %>%
-    group_by(Recording.name, condition, tea) %>%
-    #Needs to be mean because if I sum up the number of alternancias, results will be biased towards TD, which is more numerous than TEA.
-    #All participants same number of conditions (2)
-    summarise(targetRosto = mean(TR),
-              rostoTarget = mean(RT), 
-              distractorRosto = mean(DR), 
-              rostoDistractor = mean(RD)) %>%
-    melt(id.vars = c("condition", "Recording.name", "tea"))
-  return(df)
-}
+df = computeProportions(df)
+
+nonMatchedA = rocPlotter(df, "fundoProportion", FALSE) #0.632
+nonMatchedB = rocPlotter(df, "targetProportion", FALSE) #0.64
+
+#Both proportion
+ggroc(list(matched = matchedA, nonMatched = nonMatchedA))+
+  ggtitle(paste0('fundoProportion. AUC matched = ', 0.63, '; ', 'AUC non-matched: ', '0.64'))
+
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report7/rocFundoProportion.jpg")
+
+ggroc(list(matched = matchedB, nonMatched = nonMatchedB))+
+  ggtitle(paste0('targetProportion. AUC matched = ', 0.73, '; ', 'AUC non-matched: ', 0.79))
+
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report7/rocTargetProportion.jpg")
+
+
+#Alternancias não matched
+df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
+df = df %>%
+    filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+    filter(filterDurations == FALSE) %>%
+    filter(filterCutoffs == FALSE) %>%
+    filter(filterConditions == FALSE) %>%
+    filter(tea != "nonTD")
+
 df = computeAlternancias(df)
 
-rescale <- function(x){(x-min(x))/(max(x)-min(x))}
 df$value = rescale(df$value)
 
-plot(roc(df$tea, df$value)) #0.58
+nonMatchedA = rocPlotter(df, "rostoTarget", FALSE) #0.66
+nonMatchedB = rocPlotter(df, "targetRosto", FALSE) #0.66
 
-#Matched
+#Alternancia Matched
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 df = df %>%
     filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
@@ -93,7 +103,19 @@ df = df %>%
     filter(Recording.name %in% matchedParticipants)
 
 df = computeAlternancias(df)
-rescale <- function(x){(x-min(x))/(max(x)-min(x))}
 df$value = rescale(df$value)
 
-plot(roc(df$tea, df$value)) #0.58
+matchedA = rocPlotter(df, "rostoTarget", FALSE) #0.66
+matchedB = rocPlotter(df, "targetRosto", FALSE) #0.66
+
+ggroc(list(matched = matchedA, nonMatched = nonMatchedA))+
+  ggtitle(paste0('rostoTarget AUC matched = ', 0.66, '; ', 'AUC non-matched: ', '0.66'))
+
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report7/rocRostoTarget.jpg")
+
+ggroc(list(matched = matchedB, nonMatched = nonMatchedB))+
+  ggtitle(paste0('targetRosto AUC matched = ', 0.66, '; ', 'AUC non-matched: ', '0.66'))
+
+ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report7/rocTargetRosto.jpg")
+
+

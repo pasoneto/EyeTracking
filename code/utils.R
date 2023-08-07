@@ -518,3 +518,5 @@ computeAlternancias = function(df){
     melt(id.vars = c("condition", "Recording.name", "tea"))
   return(df)
 }
+
+rescale <- function(x){(x-min(x))/(max(x)-min(x))}
