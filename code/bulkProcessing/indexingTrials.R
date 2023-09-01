@@ -8,6 +8,13 @@ library("readxl")
 
 setwd(directory)
 
+#options(scipen = 100, digits = 4)
+#df = fread("Joint Attention 2022 CR736IP.tsv")
+#var1 = df$`Computer timestamp`
+#var1 = as.numeric(sub(",", ".", sub(".", "", var1, fixed=TRUE), fixed=TRUE))
+#df$`Computer timestamp` = var1
+#write.csv(df, "Joint Attention 2022 CR736IP.tsv")
+
 functionMerge = function(fileNames){
     logFailed = c()
     file_list = lapply(fileNames, function(i){
@@ -37,4 +44,3 @@ functionMerge = function(fileNames){
 #Number of output files is lower than number of input files. That's because there are repeated participants, and the output file is named with the name of the participant. That results in no repeated files.
 files = list.files()
 logFailed = functionMerge(files)
-

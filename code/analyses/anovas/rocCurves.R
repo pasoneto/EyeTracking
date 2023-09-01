@@ -56,8 +56,8 @@ df = df %>%
     filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
     filter(filterDurations == FALSE) %>%
     filter(filterCutoffs == FALSE) %>%
-    filter(filterConditions == FALSE) %>%
-    filter(tea != "nonTD")
+    filter(filterConditions == FALSE) #%>%
+    #filter(tea != "nonTD")
 
 df = computeProportions(df)
 
@@ -70,7 +70,7 @@ ggroc(list(matched = matchedA, nonMatched = nonMatchedA))+
 
 ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report7/rocFundoProportion.jpg")
 
-ggroc(list(matched = matchedB, nonMatched = nonMatchedB))+
+ggroc(list(matched = nonMatchedB, nonMatched = nonMatchedB))+
   ggtitle(paste0('targetProportion. AUC matched = ', 0.73, '; ', 'AUC non-matched: ', 0.79))
 
 ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report7/rocTargetProportion.jpg")

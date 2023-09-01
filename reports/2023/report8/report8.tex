@@ -1,0 +1,107 @@
+\documentclass{article}
+\usepackage{graphicx} %package to manage images
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{float}
+\title{Relatório 8 \\ Perdas por etapa de processamento}
+\author{Pedro A. S. O. Neto}
+\date{Agosto, 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Perdas por etapa de processamento}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrl}
+  \hline
+ & sexo & tea & nParticipants & stage \\ 
+  \hline
+  1 & F & TD & 288 & 1. raw \\ 
+  2 & F & TEA &   3 & 1. raw \\ 
+  3 & F & nonTD &  10 & 1. raw \\ 
+  4 & F & other &   5 & 1. raw \\ 
+  5 & M & TD & 303 & 1. raw \\ 
+  6 & M & TEA &  40 & 1. raw \\ 
+  7 & M & nonTD &  16 & 1. raw \\ 
+  8 & M & other &   6 & 1. raw \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrl}
+  \hline
+ & sexo & tea & nParticipants & stage \\ 
+  \hline
+  1 & F & TD & 262 & 2. valid JA data \\ 
+  2 & F & TEA &   3 & 2. valid JA data \\ 
+  3 & F & nonTD &  10 & 2. valid JA data \\ 
+  4 & F & other &   2 & 2. valid JA data \\ 
+  5 & M & TD & 277 & 2. valid JA data \\ 
+  6 & M & TEA &  39 & 2. valid JA data \\ 
+  7 & M & nonTD &  12 & 2. valid JA data \\ 
+  8 & M & other &   6 & 2. valid JA data \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrl}
+  \hline
+ & sexo & tea & nParticipants & stage \\ 
+  \hline
+  1 & F & TD & 260 & 3. anomalousVideoDuration \\ 
+  2 & F & TEA &   3 & 3. anomalousVideoDuration \\ 
+  3 & F & nonTD &  10 & 3. anomalousVideoDuration \\ 
+  4 & F & other &   2 & 3. anomalousVideoDuration \\ 
+  5 & M & TD & 275 & 3. anomalousVideoDuration \\ 
+  6 & M & TEA &  37 & 3. anomalousVideoDuration \\ 
+  7 & M & nonTD &  12 & 3. anomalousVideoDuration \\ 
+  8 & M & other &   6 & 3. anomalousVideoDuration \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrl}
+  \hline
+ & sexo & tea & nParticipants & stage \\ 
+  \hline
+  1 & F & TD & 231 & 4. cutoff50pct \\ 
+  2 & F & TEA &   1 & 4. cutoff50pct \\ 
+  3 & F & nonTD &   9 & 4. cutoff50pct \\ 
+  4 & F & other &   2 & 4. cutoff50pct \\ 
+  5 & M & TD & 243 & 4. cutoff50pct \\ 
+  6 & M & TEA &  32 & 4. cutoff50pct \\ 
+  7 & M & nonTD &  11 & 4. cutoff50pct \\ 
+  8 & M & other &   5 & 4. cutoff50pct \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrl}
+  \hline
+ & sexo & tea & nParticipants & stage \\ 
+  \hline
+  1 & F & TD & 131 & 5. cutoffCondition \\ 
+  2 & F & nonTD &   5 & 5. cutoffCondition \\ 
+  3 & F & other &   2 & 5. cutoffCondition \\ 
+  4 & M & TD & 136 & 5. cutoffCondition \\ 
+  5 & M & TEA &  16 & 5. cutoffCondition \\ 
+  6 & M & nonTD &   7 & 5. cutoffCondition \\ 
+  7 & M & other &   1 & 5. cutoffCondition \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\end{document}

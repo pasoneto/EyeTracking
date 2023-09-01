@@ -16,11 +16,11 @@ df = df %>%
     filter(filterDurations == FALSE) %>%
     filter(filterCutoffs == FALSE) %>%
     filter(filterConditions == FALSE) %>%
-    filter(tea != "nonTD")
+    filter(tea %in% c("TD", "TEA"))
 
 subSample = df %>%
   select(Recording.name, ageJA, sexo, tea) %>%
-  distinct() %>%
+  distinct(Recording.name, .keep_all = TRUE) %>%
   na.omit()
 
 nonMatchedStatistic = subSample %>%

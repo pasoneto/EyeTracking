@@ -1,3 +1,20 @@
+#Checar sujeitos nova planilhas
+#Incluir 3o grupo ANOVA
+#Plotar sujeitos como pontos nos gráficos. tirar fundo cinza
+
+#Re-rodar anovas com fundoProportion e targetProportion; rostoTarget, targetRosto
+
+
+
+
+
+
+
+
+
+
+
+
 #qual condicao tem mais TEA?
 #Descritiva dos participantes que sairam
 

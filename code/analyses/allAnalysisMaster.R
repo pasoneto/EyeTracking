@@ -6,10 +6,6 @@ library(dplyr)
 
 a = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 
-a %>%
-  filter(tea == "TRUE") %>%
-  summarise(pTea = unique(Recording.name))
-
 #Example of how to show number of alternances 
 a %>%
   #Primeiro são filtrados os participantes conforme o critério de inclusão

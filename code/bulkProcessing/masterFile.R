@@ -11,14 +11,17 @@ source("/Users/pdealcan/Documents/github/sabara/code/analyses/cutoffsNConditions
 
 files = list.files()
 file_list = lapply(files, function(i){
-                   a = fread(i)
-                   a = a %>% select(!V1)
-                   return(a)
-            }
+   a = fread(i)
+   a = a %>% select(!V1)
+   if(sum(is.na(as.numeric(a$Computer.timestamp.begin))) != 0){
+     print(unique(a$Recording.name))
+   }
+    #a$Computer.timestamp.begin = as.numeric(a$Computer.timestamp.begin)
+    #a$Computer.timestamp.end = as.numeric(a$Computer.timestamp.end)
+   return(a)
+  }
 )
 a = bind_rows(file_list) %>% select(!numberDuplicated)
-
-a$tea = unlist(lapply(a$Recording.name, tagDiagnostico))
 
 filterBase = paste(a$Presented.Stimulus.name, a$Recording.name, sep="")
 durations = filterOutDurations$filterOutDurations #anomalous videos duration
@@ -39,7 +42,6 @@ a$filterCutoffs = filterCutoffs
 a$filterConditions = filterConditions
 a$target = substr(a$target, 1, 1) #Fixing target names
 a$condition = substr(a$Presented.Stimulus.name, 1, 3) #Adding condition back
-
 
 #Total fixation duration
 a = checkFocus(a) #Check if participant is looking to the target, distractor, rosto ou fundo.
@@ -78,27 +80,31 @@ a = a %>%
          DR = alternanciaCount(focus, "distractor", "R"),
   )
 
+#Planilha nova
 infoParticipant = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/infoParticipants.csv")
+colnames(infoParticipant) = c("codigo", "Recording.name", "Codinome2", "dataNascimento", "sexo", "CARS", "dataCARS", "ageCARS",     "pontuacaoCARS", "diagnostico", "Consulta", "grupo",    "JA", "dataJA",  "ageJA",     "Obs.JA",   "GeoPref",  "dataGeo",      "Obs.GeoPref",       "pontABEP", "clasABEP", "idadeMAE", "escolPAI", "escolMAE", "idadeCRIANCA",      "regiaoCRIANCA",     "regiaoResponsavel", "RENDA", "numPESSOAS", "qtdePESSOAStrabalham", "tipoMORADIA", "saudeCRIANCA", "moradia", "GEOPREF2", "IntervalDurationAverage", "IntervalDurationMedian", "IntervalDurationCount", "IntervalDurationTotal Time of Interest Duration", "IntervalDurationTotal Recording Duration", "TotalFixDurationEllipse", "TotalFixDurationNon-social", "TotalFixDurationSocial", "TotalFixDurationAverage", "TotalFixDurationMedian", "TotalFixDurationSum", "TotalFixDurationTotal Time of Interest Duration", "TotalFixDurationTotal Recording Duration", "AvgFixationDurEllipse", "AvgFixationDurNon-social", "AvgFixationDurSocial", "AvgFixationDurAverage", "AvgFixationDurMedian", "AvgFixationDurTotal Time of Interest Duration", "AvgFixationDurTotal Recording Duration")
 
-infoParticipant = infoParticipant %>% select(Codinome, `Data de Nascimento`, `Data CARS`, `JA data`, `Pont. CARS`, `GeoPref data`, Sexo) 
-colnames(infoParticipant) = c("Recording.name", "dataNascimento", "dataCARS", "dataJA", "pontuacaoCARS", "dataGeo", "sexo") 
-
-a = merge(a, infoParticipant, by = "Recording.name", all = FALSE)
+infoParticipant = infoParticipant %>%
+  select(Recording.name, grupo, dataNascimento, dataCARS, dataJA, ageJA, ageCARS, pontuacaoCARS, dataGeo, sexo)
 
 ##Adding aditional information about participant (CARS, idade, sexo)
 a$Recording.name = str_replace_all(a$Recording.name, "-3", "")
 a$Recording.name = str_replace_all(a$Recording.name, "-2", "")
 
-a$tea = unlist(lapply(a$Recording.name, tagDiagnostico))
+participantsNotInData = infoParticipant %>%
+  filter(!Recording.name %in% a$Recording.name) %>%
+  select(Recording.name)
 
-a$dataNascimento <- as.Date(a$dataNascimento, "%d/%m/%Y")
-a$dataCARS <- as.Date(a$dataCARS, "%d/%m/%Y")
-a$dataJA <- as.Date(a$dataJA, "%d/%m/%Y")
+participantsNotInData = unique(participantsNotInData$Recording.name)
 
-a$ageJA <- a$dataJA - a$dataNascimento
-a$ageCARS <- a$dataCARS - a$dataNascimento
+infoParticipant = infoParticipant %>%
+  filter(!Recording.name %in% participantsNotInData)
 
-a$timeBetweenJAandCARS <- abs(a$dataCARS - a$dataJA)
+a = merge(a, infoParticipant, by = "Recording.name", all = FALSE)
+
+a$tea = unlist(lapply(a$grupo, tagDiagnostico))
+
+a$timeBetweenJAandCARS <- abs(a$ageCARS - a$ageJA)
 
 #File final elaborada
 a = a %>%

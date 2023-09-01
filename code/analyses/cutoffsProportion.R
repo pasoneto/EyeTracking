@@ -12,6 +12,9 @@ filesA = list.files()
 file_list = lapply(filesA, function(i){
                    a = fread(i)
                    a = a %>% select(!V1)
+                   print(all(colnames(a) == c("Presented.Stimulus.name", "Eye.movement.type.index", "Computer.timestamp.begin", "Computer.timestamp.end", "Recording.time.begin", "Recording.time.end", "Gaze.event.duration", "Eye.movement.type", "variable", "value", "pupil.right", "pupil.left", "target", "Recording.name", "numberDuplicated")))
+                   a$Computer.timestamp.begin = as.numeric(a$Computer.timestamp.begin)
+                   a$Computer.timestamp.end = as.numeric(a$Computer.timestamp.end)
                    return(a)
             }
 )

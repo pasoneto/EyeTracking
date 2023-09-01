@@ -70,7 +70,9 @@ detatchFundo = function(file, directoryOut){
 
 #Process participant completely
 processParticipant = function(dataFrame, trials, colunas){
-  
+
+  dataFrame = dataFrame %>% select(!V1)  
+
   participantID = unique(dataFrame$Recording.name)
   nomeColunas = colnames(dataFrame)
   nomeColunas = str_replace_all(nomeColunas, "..mm.", "")  
@@ -270,34 +272,22 @@ addedNames = c("Fixation.point.X", "AOI.hit..RJA_A2_B1_E...Brinquedo.Direita..1"
 colunasWithFix = c(colunas, addedNames, fundos)
 colunasWithoutFix = c(colunas, fundos)
 
+participantsDiagnosticos = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/infoParticipants.csv")
+participantsDiagnosticos = participantsDiagnosticos %>% select(Codinome, Grupo) 
 
-participantsDiagnosticos = fread("/Users/pdealcan/Documents/github/sabara/details_experiment/participantsDiagnostico.csv")
-diagnostico = participantsDiagnosticos %>%
-  filter(Grupo == 2) %>%
-  select(Codinome) %>%
-  list()
-
-nonTD = participantsDiagnosticos %>%
-  filter(Grupo == 3) %>%
-  select(Codinome) %>%
-  list()
+participantsDiagnosticos = participantsDiagnosticos %>%
+  distinct(Codinome, .keep_all = TRUE) %>%
+  filter(!is.na(Grupo))
 
 #1 - Desenvolvimento Típico
 #2 - TEA
-#3 - Outros
+#3 - nonTD
+#5 - outro
+
 #Participantes com diagnostico tea
 tagDiagnostico = function(x){
-  isTEA = any(grepl(x, diagnostico))
-  isNonTD = any(grepl(x, nonTD))
-  if(isTEA){
-    return("TEA")
-  } else {
-    if(isNonTD){
-      return("nonTD")
-    } else {
-      return("TD")
-    }
-  }
+    tagsList = c("TD", "TEA", "nonTD", "", "other")
+    return(tagsList[as.numeric(x)])
 }
 
 #Computes total time of each video per participant
