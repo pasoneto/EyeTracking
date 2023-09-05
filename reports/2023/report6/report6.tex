@@ -26,8 +26,15 @@ There were notable discrepancies in age between our original samples of TD and T
   \hline
 1 & F & TD & 1.00 & 2.89 & 188 \\ 
   2 & F & TEA &  & 2.00 &   1 \\ 
-  3 & M & TD & 1.04 & 2.78 & 203 \\ 
-  4 & M & TEA & 0.85 & 2.88 &  22 \\ 
+  3 & F & nonTD & 0.83 & 3.03 &   5 \\ 
+  4 & F & other & 1.59 & 2.54 &   2 \\ 
+  5 & F &  & 1.06 & 3.38 &   4 \\ 
+  6 & M & TD & 1.04 & 2.78 & 203 \\ 
+  7 & M & TEA & 0.84 & 2.93 &  22 \\ 
+  8 & M & nonTD & 0.69 & 3.48 &   8 \\ 
+  9 & M & other & 0.74 & 3.15 &   4 \\ 
+  10 & M &  & 0.83 & 3.05 &   7 \\ 
+  11 & nan &  &  &  &   3 \\ 
    \hline
 \end{tabular}
 \end{table}
@@ -110,13 +117,13 @@ Mixed designs anova with diagnostic (TEA vs TD) as between subjects factor, cond
 \end{figure}
 
 \begin{figure}[H]
-  \caption{Visualizing interaction of condition and variable}
-  \noindent\makebox[\textwidth]{\includegraphics[scale=0.2]{./conditionVariableAlternancia.png}}
+  \caption{Visualizing interaction of condition, variable and tea. *non significant}
+  \noindent\makebox[\textwidth]{\includegraphics[scale=0.2]{./conditionVariableTeaAlternancia.png}}
   \centering
 \end{figure}
 
 \begin{figure}[H]
-  \caption{Visualizing interaction between tea and variable}
+  \caption{Visualizing interaction between tea and variable. *Non significant}
   \noindent\makebox[\textwidth]{\includegraphics[scale=0.2]{./teaVariableAlternancia.png}}
   \centering
 \end{figure}
@@ -132,17 +139,22 @@ Mixed designs anova with diagnostic (TEA vs TD) as between subjects factor, cond
 \end{figure}
 
 \begin{figure}[H]
-  \caption{Visualizing variable effect}
+  \caption{Visualizing interaction of tea and variable}
+  \noindent\makebox[\textwidth]{\includegraphics[scale=0.2]{./teaVariableProportion.png}}
+  \centering
+\end{figure}
+
+\begin{figure}[H]
+  \caption{Visualizing main effect of variable}
   \noindent\makebox[\textwidth]{\includegraphics[scale=0.2]{./variableProportion.png}}
   \centering
 \end{figure}
 
 \begin{figure}[H]
-  \caption{Visualizing interaction condition and variable}
-  \noindent\makebox[\textwidth]{\includegraphics[scale=0.2]{./conditionVariableProportion.png}}
+  \caption{Visualizing interaction of condition and variable}
+  \noindent\makebox[\textwidth]{\includegraphics[scale=0.2]{./condidionVariableProportion.png}}
   \centering
 \end{figure}
-
 
 Ho, D., Imai, K., King, G., \& Stuart, E. A. (2011). MatchIt: Nonparametric Preprocessing for Parametric Causal Inference. Journal of Statistical Software, 42(8), 1–28. https://doi.org/10.18637/jss.v042.i08
 
