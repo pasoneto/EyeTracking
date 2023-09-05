@@ -15,118 +15,116 @@
 
 \section{Perdas por etapa de processamento}
 
+
 \begin{table}[ht]
 \centering
-\begin{tabular}{rllrl}
+\begin{tabular}{rlrl}
   \hline
- & sexo & tea & nParticipants & stage \\ 
+ & tea & length(unique(Recording.name)) & 
+stage \\ 
   \hline
-  1 & F & TD & 288 & 1. raw \\ 
-  2 & F & TEA &   3 & 1. raw \\ 
-  3 & F & nonTD &  10 & 1. raw \\ 
-  4 & F & other &   5 & 1. raw \\ 
-  5 & M & TD & 303 & 1. raw \\ 
-  6 & M & TEA &  40 & 1. raw \\ 
-  7 & M & nonTD &  16 & 1. raw \\ 
-  8 & M & other &   6 & 1. raw \\ 
+1 & TD & 590 & planilha raw \\ 
+  2 & TEA &  43 & planilha raw \\ 
+  3 & nonTD &  27 & planilha raw \\ 
+  4 & other &  11 & planilha raw \\ 
+  5 &  &  96 & planilha raw \\ 
    \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{rllrl}
+\begin{tabular}{rlrl}
   \hline
- & sexo & tea & nParticipants & stage \\ 
+ & tea & nParticipants & stage \\ 
   \hline
-  1 & F & TD & 262 & 2. valid JA data \\ 
-  2 & F & TEA &   3 & 2. valid JA data \\ 
-  3 & F & nonTD &  10 & 2. valid JA data \\ 
-  4 & F & other &   2 & 2. valid JA data \\ 
-  5 & M & TD & 277 & 2. valid JA data \\ 
-  6 & M & TEA &  39 & 2. valid JA data \\ 
-  7 & M & nonTD &  12 & 2. valid JA data \\ 
-  8 & M & other &   6 & 2. valid JA data \\ 
+1 & TD & 538 & existing JA data \\ 
+  2 & TEA &  42 & existing JA data \\ 
+  3 & nonTD &  23 & existing JA data \\ 
+  4 & other &   9 & existing JA data \\ 
+  5 &  &  12 & existing JA data \\ 
    \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{rllrl}
+\begin{tabular}{rlrl}
   \hline
- & sexo & tea & nParticipants & stage \\ 
+ & tea & nParticipants & stage \\ 
   \hline
-  1 & F & TD & 260 & 3. anomalousVideoDuration \\ 
-  2 & F & TEA &   3 & 3. anomalousVideoDuration \\ 
-  3 & F & nonTD &  10 & 3. anomalousVideoDuration \\ 
-  4 & F & other &   2 & 3. anomalousVideoDuration \\ 
-  5 & M & TD & 275 & 3. anomalousVideoDuration \\ 
-  6 & M & TEA &  37 & 3. anomalousVideoDuration \\ 
-  7 & M & nonTD &  12 & 3. anomalousVideoDuration \\ 
-  8 & M & other &   6 & 3. anomalousVideoDuration \\ 
+1 & TD & 534 & at least one valid trial (N
+o BaseLine) \\ 
+  2 & TEA &  40 & at least one valid trial
+ (No BaseLine) \\ 
+  3 & nonTD &  23 & at least one valid tri
+al (No BaseLine) \\ 
+  4 & other &   9 & at least one valid tri
+al (No BaseLine) \\ 
+  5 &  &  17 & at least one valid trial (N
+o BaseLine) \\ 
    \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{rllrl}
+\begin{tabular}{rlrl}
   \hline
- & sexo & tea & nParticipants & stage \\ 
+ & tea & nParticipants & stage \\ 
   \hline
-  1 & F & TD & 231 & 4. cutoff50pct \\ 
-  2 & F & TEA &   1 & 4. cutoff50pct \\ 
-  3 & F & nonTD &   9 & 4. cutoff50pct \\ 
-  4 & F & other &   2 & 4. cutoff50pct \\ 
-  5 & M & TD & 243 & 4. cutoff50pct \\ 
-  6 & M & TEA &  32 & 4. cutoff50pct \\ 
-  7 & M & nonTD &  11 & 4. cutoff50pct \\ 
-  8 & M & other &   5 & 4. cutoff50pct \\ 
+1 & TD & 534 & filter: anomalous duration 
+\\ 
+  2 & TEA &  40 & filter: anomalous durati
+on \\ 
+  3 & nonTD &  23 & filter: anomalous dura
+tion \\ 
+  4 & other &   9 & filter: anomalous dura
+tion \\ 
+  5 &  &  17 & filter: anomalous duration 
+\\ 
    \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{rllrl}
+\begin{tabular}{rlrl}
   \hline
- & sexo & tea & nParticipants & stage \\ 
+ & tea & nParticipants & stage \\ 
   \hline
-  1 & F & TD & 131 & 5. cutoffCondition \\ 
-  2 & F & nonTD &   5 & 5. cutoffCondition \\ 
-  3 & F & other &   2 & 5. cutoffCondition \\ 
-  4 & M & TD & 136 & 5. cutoffCondition \\ 
-  5 & M & TEA &  16 & 5. cutoffCondition \\ 
-  6 & M & nonTD &   7 & 5. cutoffCondition \\ 
-  7 & M & other &   1 & 5. cutoffCondition \\ 
+1 & TD & 473 & filter: anomalus dur + cuto
+ff50\% \\ 
+  2 & TEA &  33 & filter: anomalus dur + c
+utoff50\% \\ 
+  3 & nonTD &  21 & filter: anomalus dur +
+ cutoff50\% \\ 
+  4 & other &   8 & filter: anomalus dur +
+ cutoff50\% \\ 
+  5 &  &  17 & filter: anomalus dur + cuto
+ff50\% \\ 
    \hline
 \end{tabular}
 \end{table}
-
-\section{Ages before and after filtering (years)}
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{rrr}
+\begin{tabular}{rlrl}
   \hline
-  & Before filtering & After filtering \\ 
+ & tea & nParticipants & stage \\ 
   \hline
-  sdAgeJA & 1.05 & 0.97 \\ 
-  sdAgeCARS & 1.06 & 0.99 \\ 
-  meanAgeJA & 2.77 & 2.92 \\ 
-  maxAgeJA & 5.08 & 4.67 \\ 
-  meanAgeCARS & 2.71 & 2.89 \\ 
-  maxAgeCARS & 5.08 & 4.67 \\ 
-  meanTimeJAandCARS & 0.07 & 0.06 \\ 
-  sdTimeJAandCARS & 0.12 & 0.10 \\ 
-  maxTimeJAandCARS & 0.92 & 0.75 \\ 
-  minTimeJAandCARS & 0.00 & 0.00 \\ 
+1 & TD & 391 & filter: anomalous dur + cut
+offs + both conditions \\ 
+  2 & TEA &  23 & filter: anomalous dur + 
+cutoffs + both conditions \\ 
+  3 & nonTD &  13 & filter: anomalous dur 
++ cutoffs + both conditions \\ 
+  4 & other &   6 & filter: anomalous dur 
++ cutoffs + both conditions \\ 
+  5 &  &  14 & filter: anomalous dur + cut
+offs + both conditions \\ 
    \hline
 \end{tabular}
 \end{table}
-
-
-
 
 \end{document}
