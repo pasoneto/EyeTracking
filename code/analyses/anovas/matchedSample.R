@@ -10,13 +10,15 @@ set.seed(1000)
 
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 
+otherTEA = "nonTD"
+
 #Primeiro são filtrados os participantes conforme o critério de inclusão
 df = df %>%
     filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
     filter(filterDurations == FALSE) %>%
     filter(filterCutoffs == FALSE) %>%
     filter(filterConditions == FALSE) %>%
-    filter(tea %in% c("TD", "TEA"))
+    filter(tea %in% c("TEA", otherTEA))
 
 subSample = df %>%
   select(Recording.name, ageJA, sexo, tea) %>%
@@ -40,10 +42,11 @@ subSample = match.data(subSample)
 
 dStatistic = subSample %>%
   group_by(tea, sexo) %>%
-  summarise(meanAge = mean(ageJA)/365,
-            sdAge = sd(ageJA)/365,
-            minAge = min(ageJA)/365,
-            maxAge = max(ageJA)/365)
+  summarise(meanAge = mean(ageJA)/12,
+            sdAge = sd(ageJA)/12,
+            N = length(ageJA),
+            minAge = min(ageJA)/12,
+            maxAge = max(ageJA)/12)
 
 print(xtable(nonMatchedStatistic, type = "latex"))
 print(xtable(dStatistic, type = "latex"))

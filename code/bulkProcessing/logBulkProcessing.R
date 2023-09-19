@@ -14,6 +14,12 @@ infoParticipant$timeBetweenJAandCARS <- abs(infoParticipant$ageCARS - infoPartic
 
 infoParticipant$tea = unlist(lapply(infoParticipant$grupo, tagDiagnostico))
 
+#First
+first = infoParticipant %>%
+  group_by(tea) %>%
+  summarise(length(unique(Recording.name)))
+first$stage = "planilha raw"
+
 #Processed
 #	FS76IP	2022-09-26	2021-11-03
 #Original
@@ -47,8 +53,14 @@ allRaw %>%
 
 infoParticipant %>%
   filter(JA == 1) %>%
-  filter(!Recording.name %in% allRaw$Recording.name) %>% distinct(Recording.name, .keep_all = TRUE) %>%
+  filter(!Recording.name %in% allRaw$Recording.name) %>% 
+  distinct(Recording.name, .keep_all = TRUE) %>%
   select(Recording.name)
+
+infoParticipant %>%
+  filter(!Recording.name %in% c("FS12IP", "MR313IP", "MR324IP", "CR397IP", "SI421IP", "CR701IP")) %>%
+  group_by(tea) %>%
+  summarise(length(unique(Recording.name)))
 
 logFile1 = allRaw %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
@@ -56,11 +68,18 @@ logFile1 = allRaw %>%
   group_by(sexo, tea) %>%
   summarise(nParticipants = length(unique(Recording.name)))
 
+#Second
+second = allRaw %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  filter(JA == 1) %>%
+  group_by(tea) %>%
+  summarise(nParticipants = length(unique(Recording.name)))
+
+second$stage = "existing JA data"
 ################################
 ## Anomalous videos durations ##
 ################################
 masterF = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
-
 masterF$Presented.Stimulus.name = substr(masterF$Presented.Stimulus.name, 1, 11)
 
 logFile2 = masterF %>%
@@ -70,28 +89,96 @@ logFile2 = masterF %>%
   group_by(sexo, tea) %>%
   summarise(nParticipants = length(unique(Recording.name)))
 
+#Third
+third = masterF %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  group_by(tea) %>%
+  summarise(nParticipants = length(unique(Recording.name)))
+
+third$stage = "at least one valid trial (No BaseLine)"
+
 #################
 ## Cutoffs 50% ##
 #################
 logFile3 = masterF %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
-  filter(!is.na(tea)) %>%
   filter(filterDurations == FALSE) %>%
   filter(filterCutoffs == FALSE) %>%
-  group_by(sexo, tea) %>%
+  group_by(tea) %>%
   summarise(nParticipants = length(unique(Recording.name)))
+
+#Fourth
+fourth = masterF %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  filter(filterDurations == FALSE) %>%
+  group_by(tea) %>%
+  summarise(nParticipants = length(unique(Recording.name)))
+
+fourth$stage = "filter: anomalous duration"
+  
+#Fifth
+fifth = masterF %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  filter(filterDurations == FALSE) %>%
+  filter(filterCutoffs == FALSE) %>%
+  group_by(tea) %>%
+  summarise(nParticipants = length(unique(Recording.name)))
+  
+fifth$stage = "filter: anomalus dur + cutoff50%"
+
+#Sixth
+sixth = masterF %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  filter(filterDurations == FALSE) %>%
+  filter(filterCutoffs == FALSE) %>%
+  filter(filterConditions == FALSE) %>%
+  group_by(tea) %>%
+  summarise(nParticipants = length(unique(Recording.name)))
+
+sixth$stage = "filter: anomalous dur + cutoffs + both conditions"
 
 ######################
 ## Cutoffs condição ##
 ######################
 logFile4 = masterF %>%
   filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
-  distinct(Recording.name, .keep_all = TRUE) %>%
+  select(Recording.name, Gaze.event.duration) %>%
   filter(!is.na(tea)) %>%
   filter(filterDurations == FALSE) %>%
   filter(filterCutoffs == FALSE) %>%
   filter(filterConditions == FALSE) %>%
-  group_by(sexo, tea) %>%
+  group_by(tea) %>%
+  summarise(nParticipants = length(unique(Recording.name)))
+
+filtered = masterF %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  filter(!is.na(tea)) %>%
+  filter(filterDurations == FALSE) %>%
+  filter(filterCutoffs == FALSE) %>%
+  filter(filterConditions == FALSE)
+
+namesIn = unique(filtered$Recording.name)
+infoParticipant$Recording.name
+
+namesIn2 = c()
+for(k in infoParticipant$Codinome){
+  if(k %in% namesIn){
+    namesIn2 = c(namesIn2, TRUE)
+  } else {
+    namesIn2 = c(namesIn2, FALSE)
+  }
+}
+
+infoParticipant$finalSample = namesIn2
+write.csv(infoParticipant, "/Users/pdealcan/Downloads/infoParticipants.csv")
+
+masterF %>%
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  distinct(Recording.name, .keep_all = TRUE) %>%
+  filter(filterDurations == FALSE) %>%
+  filter(filterCutoffs == FALSE) %>%
+  #filter(filterConditions == FALSE) %>%
+  group_by(tea) %>%
   summarise(nParticipants = length(unique(Recording.name)))
 
 logFile0$stage = "1. raw"
@@ -118,14 +205,47 @@ print(xtable(logFile4, type = "latex"))
 masterF = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
 masterF$Presented.Stimulus.name = substr(masterF$Presented.Stimulus.name, 1, 11)
 
-ageSummary = masterF %>% 
-  summarise(sdAgeJA = sd(ageJA, na.rm = TRUE),
-            sdAgeCARS = sd(ageCARS, na.rm = TRUE),
-            meanAgeJA = mean(ageJA, na.rm = TRUE),
-            maxAge = max(ageJA, na.rm = TRUE),
-            meanAgeCARS = mean(ageCARS, na.rm = TRUE),
-            meanTimeJAandCARS = mean(timeBetweenJAandCARS, na.rm = TRUE),
-            sdTimeJAandCARS = sd(timeBetweenJAandCARS, na.rm = TRUE),
-            maxTimeJAandCARS = max(timeBetweenJAandCARS, na.rm = TRUE),
-            minTimeJAandCARS = min(timeBetweenJAandCARS, na.rm = TRUE)) %>%
-t()
+ageSummaryPreFilters = masterF %>% 
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  distinct(Recording.name, .keep_all = TRUE) %>%
+  summarise(sdAgeJA = sd(ageJA, na.rm = TRUE)/12,
+            sdAgeCARS = sd(ageCARS, na.rm = TRUE)/12,
+            meanAgeJA = mean(ageJA, na.rm = TRUE)/12,
+            maxAgeJA = max(ageJA, na.rm = TRUE)/12,
+            meanAgeCARS = mean(ageCARS, na.rm = TRUE)/12,
+            maxAgeCARS = max(ageJA, na.rm = TRUE)/12,
+            meanTimeJAandCARS = mean(timeBetweenJAandCARS, na.rm = TRUE)/12,
+            sdTimeJAandCARS = sd(timeBetweenJAandCARS, na.rm = TRUE)/12,
+            maxTimeJAandCARS = max(timeBetweenJAandCARS, na.rm = TRUE)/12,
+            minTimeJAandCARS = min(timeBetweenJAandCARS, na.rm = TRUE)/12)
+
+ageSummaryPostFilters = masterF %>% 
+  filter(!str_detect(Presented.Stimulus.name, 'BL_')) %>%
+  distinct(Recording.name, .keep_all = TRUE) %>%
+  filter(!is.na(tea)) %>%
+  filter(filterDurations == FALSE) %>%
+  filter(filterCutoffs == FALSE) %>%
+  filter(filterConditions == FALSE) %>%
+  summarise(sdAgeJA = sd(ageJA, na.rm = TRUE)/12,
+            sdAgeCARS = sd(ageCARS, na.rm = TRUE)/12,
+            meanAgeJA = mean(ageJA, na.rm = TRUE)/12,
+            maxAgeJA = max(ageJA, na.rm = TRUE)/12,
+            meanAgeCARS = mean(ageCARS, na.rm = TRUE)/12,
+            maxAgeCARS = max(ageJA, na.rm = TRUE)/12,
+            meanTimeJAandCARS = mean(timeBetweenJAandCARS, na.rm = TRUE)/12,
+            sdTimeJAandCARS = sd(timeBetweenJAandCARS, na.rm = TRUE)/12,
+            maxTimeJAandCARS = max(timeBetweenJAandCARS, na.rm = TRUE)/12,
+            minTimeJAandCARS = min(timeBetweenJAandCARS, na.rm = TRUE)/12)
+
+
+ageSummary = bind_rows(ageSummaryPreFilters, ageSummaryPostFilters) %>% t()
+
+print(xtable(ageSummary, type = "latex"))
+
+print(xtable(first, type = "latex"))
+print(xtable(second, type = "latex"))
+print(xtable(third, type = "latex"))
+print(xtable(fourth, type = "latex"))
+print(xtable(fifth, type = "latex"))
+print(xtable(sixth, type = "latex"))
+

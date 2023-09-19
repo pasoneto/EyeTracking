@@ -32,9 +32,9 @@ filterDurations = c()
 filterCutoffs = c()
 filterConditions = c()
 for(k in 1:length(filterBase)){
-    filterDurations = c(filterDurations, filterBase[k] %in% durations)
-    filterCutoffs = c(filterCutoffs, filterBase[k] %in% cutoff)
-    filterConditions = c(filterConditions, a$Recording.name[k] %in% conditions)
+  filterDurations = c(filterDurations, filterBase[k] %in% durations)
+  filterCutoffs = c(filterCutoffs, filterBase[k] %in% cutoff)
+  filterConditions = c(filterConditions, a$Recording.name[k] %in% conditions)
 }
 
 a$filterDurations = filterDurations

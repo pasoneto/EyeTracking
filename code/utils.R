@@ -497,7 +497,7 @@ computeProportions = function(df){
 #Compute alternancias
 computeAlternancias = function(df){
   df = df %>%
-    filter(tea != "nonTD") %>%
+    #filter(tea != "nonTD") %>%
     group_by(Recording.name, condition, tea) %>%
     #Needs to be mean because if I sum up the number of alternancias, results will be biased towards TD, which is more numerous than TEA.
     #All participants same number of conditions (2)
@@ -510,3 +510,66 @@ computeAlternancias = function(df){
 }
 
 rescale <- function(x){(x-min(x))/(max(x)-min(x))}
+
+#Functions to help choose best thresholds
+threshClassifier = function(x, rocObj, thresh){
+  if(rocObj$direction == ">"){
+    if(x >= thresh){
+      return("TEA")
+    } else {
+      return("TD")
+    }
+  }
+  if(rocObj$direction == "<"){
+    if(x <= thresh){
+      return("TEA")
+    } else {
+      return("TD")
+    }
+  }
+}
+
+finalClassifier = function(data, AOI, thresh){
+  data = data %>%
+        group_by(variable, Recording.name, tea) %>%
+        summarise(value = mean(value)) %>%
+        filter(variable == AOI)
+  rocObj = rocPlotter(data, AOI, FALSE, FALSE)
+  value = data$value
+  predicted = unlist(lapply(value, function(x){threshClassifier(x, rocObj, thresh)}))
+  a = c()
+  a$predicted = predicted
+  a$true = data$tea
+  acc = sum(a$predicted == a$true)/length(a$predicted)
+  conf_matrix = table(a$predicted,a$true)
+  sensitivity = sensitivity(conf_matrix)
+  specificity = specificity(conf_matrix)
+  a$acc = (sensitivity+specificity)/2
+  a$rocObj = rocObj
+  a$sensitivity = sensitivity
+  a$specificity = specificity
+  a$direction = rocObj$direction
+  return(a)
+}
+
+decisionVisualizer = function(df, AOI){
+  rocObj = rocPlotter(df, AOI, FALSE, FALSE)
+  accs = c()
+  senss = c()
+  specs = c()
+  threshs = rocObj$thresh[is.finite(rocObj$thresh)]
+  for(i in threshs){
+    accs = c(accs, finalClassifier(df, AOI, i)$acc)
+    senss = c(senss, finalClassifier(df, AOI, i)$sensitivity)
+    specs = c(specs, finalClassifier(df, AOI, i)$specificity)
+  }
+  dfFinal = data.frame(threshs = threshs,
+                       trueN = specs,
+                       trueP = senss,
+                       accs = accs,
+                       direction = rocObj$direction
+  )
+  dfFinal = dfFinal %>% melt(id.vars = c("threshs", "direction"))
+  return(dfFinal)
+}
+
