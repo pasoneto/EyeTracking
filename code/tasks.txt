@@ -1,6 +1,17 @@
-- Colocar scatter para analises descritivas
-- Sensitivity specificity das ROCS
-- Fazer ROCS só pra sample completo (Juntar as curvas no mesmo gráfico)
-- Adicionar curva diagonal ROC;
-- Refazer anova 3 groups;
+- Files in /Users/pdealcan/Documents/github/sabara/details_experiment/fixationDurGeopref/
+- Renomear grupos com infoParticipants.csv
+- Para participantes duplicados (e.g., -2, -3), ficar com participante com maior duração de vídeo (Total Time of Interest Duration)
+- Tabela: fixationDuration; 
+- Filtro: 50% de 66 (Coluna Total Time of Interest Duration). Tirar crianças com < 33.
+- Total Time of Interest Duration = 100% do trial
+- Calcular %social e non-social, ignorar ellipse
 
+- Descritivas: quantas crianças, de quais grupos
+- ANOVA ASD - nonASD (visual preferences entre os grupos), Tuckey.
+
+
+- Detalhes logit. Rodar com todas as variáveis (alternancia e proporcao).
+
+#Dados pré e pós
+- https://drive.google.com/drive/folders/1GllsF5vJYKnnakbV8YMghr6JrOL6CaCr?usp=sharing
+- Nos dados do geopref, tem o PI (Pós intervenção)

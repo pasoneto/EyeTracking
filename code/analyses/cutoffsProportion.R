@@ -4,7 +4,8 @@ library("stringr")
 library("readxl")
 library("ggridges")
 library(xtable)
-directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL/"
+#directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL/"
+directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINALPost/"
 
 setwd(directory)
 

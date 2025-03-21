@@ -144,4 +144,4 @@ a = a %>%
          filterCutoffs, 
          filterConditions)
 
-write.csv(a, "/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
+write.csv(a, "/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFilePOST.csv")

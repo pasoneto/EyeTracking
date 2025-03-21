@@ -1,8 +1,11 @@
 source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library("ggridges")
-directory = "/Users/pdealcan/Documents/github/dataSabara/finalRawData"
-directoryOut = "/Users/pdealcan/Documents/github/dataSabara/allIndexedFINAL/"
+#directory = "/Users/pdealcan/Documents/github/dataSabara/finalRawData"
+#directoryOut = "/Users/pdealcan/Documents/github/dataSabara/allIndexedFINAL/"
+directory = "/Users/pdealcan/Documents/github/dataSabara/finalRawDataPost"
+directoryOut = "/Users/pdealcan/Documents/github/dataSabara/allIndexedFINALPost/"
+
 setwd(directory)
 library("readxl")
 
@@ -19,6 +22,7 @@ functionMerge = function(fileNames){
     logFailed = c()
     file_list = lapply(fileNames, function(i){
       a = readAndRename(i)
+      a$Recording.name = str_replace_all(a$Recording.name, "-PI", "")
       namesOfColumns = a %>% colnames()
       duplicatedCols = !all(namesOfColumns %>% duplicated())
       if(duplicatedCols){

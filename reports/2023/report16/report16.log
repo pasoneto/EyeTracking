@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.9.20)  27 SEP 2023 13:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.9.20)  14 DEC 2023 01:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**report13.tex
-(./report13.tex
+**report16.tex
+(./report16.tex
 LaTeX2e <2020-10-01> patch level 4
 L3 programming layer <2021-02-18> (/usr/local/texlive/2021/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
@@ -179,8 +179,8 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count267
 \l__pdf_internal_box=\box49
-) (./report13.aux)
-\openout1 = `report13.aux'.
+) (./report16.aux)
+\openout1 = `report16.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
@@ -266,9 +266,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 12.
 LaTeX Info: Redefining \pageref on input line 12.
 LaTeX Info: Redefining \nameref on input line 12.
- (./report13.out) (./report13.out)
+ (./report16.out) (./report16.out)
 \@outlinefile=\write3
-\openout3 = `report13.out'.
+\openout3 = `report16.out'.
 
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 15.
@@ -280,160 +280,88 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 22.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 22.
-<./anovaAlternancia.png, id=8, 1039.885pt x 300.12125pt>
-File: ./anovaAlternancia.png Graphic file (type png)
-<use ./anovaAlternancia.png>
-Package pdftex.def Info: ./anovaAlternancia.png  used on input line 43.
-(pdftex.def)             Requested size: 519.94122pt x 150.06026pt.
-<./teaMainAlternancia.png, id=10, 2106.87125pt x 2106.87125pt>
-File: ./teaMainAlternancia.png Graphic file (type png)
-<use ./teaMainAlternancia.png>
-Package pdftex.def Info: ./teaMainAlternancia.png  used on input line 49.
-(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
+<./prePos.png, id=16, 2107.875pt x 2107.875pt>
+File: ./prePos.png Graphic file (type png)
+<use ./prePos.png>
+Package pdftex.def Info: ./prePos.png  used on input line 50.
+(pdftex.def)             Requested size: 421.56754pt x 421.56754pt.
  [1
 
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<./prePosVar.png, id=27, 2107.875pt x 2107.875pt>
+File: ./prePosVar.png Graphic file (type png)
+<use ./prePosVar.png>
+Package pdftex.def Info: ./prePosVar.png  used on input line 68.
+(pdftex.def)             Requested size: 421.56754pt x 421.56754pt.
+ [2pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.52 
-      <./anovaAlternancia.png>]
-<./alternanciaVariable.png, id=22, 2106.87125pt x 2106.87125pt>
-File: ./alternanciaVariable.png Graphic file (type png)
-<use ./alternanciaVariable.png>
-Package pdftex.def Info: ./alternanciaVariable.png  used on input line 69.
-(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
- [2pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
+l.71 
+      <./prePos.png>]
+<./prePosCondition.png, id=34, 2107.875pt x 2107.875pt>
+File: ./prePosCondition.png Graphic file (type png)
+<use ./prePosCondition.png>
+Package pdftex.def Info: ./prePosCondition.png  used on input line 93.
+(pdftex.def)             Requested size: 421.56754pt x 421.56754pt.
+ [3pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.72 
-     pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
+l.96 
+      <./prePosVar.png>]
+<./prePosVarProportion.png, id=41, 2107.875pt x 2107.875pt>
+File: ./prePosVarProportion.png Graphic file (type png)
+<use ./prePosVarProportion.png>
+Package pdftex.def Info: ./prePosVarProportion.png  used on input line 121.
+(pdftex.def)             Requested size: 421.56754pt x 421.56754pt.
+ [4pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.72 
-      <./teaMainAlternancia.png>]
-<./conditionVariable.png, id=30, 2106.87125pt x 2106.87125pt>
-File: ./conditionVariable.png Graphic file (type png)
-<use ./conditionVariable.png>
-Package pdftex.def Info: ./conditionVariable.png  used on input line 90.
-(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
- [3pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
+l.124 
+       <./prePosCondition.png>] [5]
+<./teaPrePosProportion.png, id=52, 2107.875pt x 2107.875pt>
+File: ./teaPrePosProportion.png Graphic file (type png)
+<use ./teaPrePosProportion.png>
+Package pdftex.def Info: ./teaPrePosProportion.png  used on input line 145.
+(pdftex.def)             Requested size: 421.56754pt x 421.56754pt.
+ [6pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.93 
-     pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
+l.148 
+       <./prePosVarProportion.png>] [7pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.93 
-      <./alternanciaVariable.png>]
-<./conditionVariableTea.png, id=38, 2106.87125pt x 2106.87125pt>
-File: ./conditionVariableTea.png Graphic file (type png)
-<use ./conditionVariableTea.png>
-Package pdftex.def Info: ./conditionVariableTea.png  used on input line 116.
-(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
- [4pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
+l.164 \end{table}
+                  <./teaPrePosProportion.png>]
+<./teaConditionProportion.png, id=66, 2107.875pt x 2107.875pt>
+File: ./teaConditionProportion.png Graphic file (type png)
+<use ./teaConditionProportion.png>
+Package pdftex.def Info: ./teaConditionProportion.png  used on input line 168.
+(pdftex.def)             Requested size: 421.56754pt x 421.56754pt.
+ [8pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.119 
-       <./conditionVariable.png>]
-Overfull \vbox (6.79567pt too high) has occurred while \output is active []
-
- [5pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
+l.194 \end{document}
+                    pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.119 
-      pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.119 
-       <./conditionVariableTea.png>]
-<./anovaProportion.png, id=52, 1170.3725pt x 309.155pt>
-File: ./anovaProportion.png Graphic file (type png)
-<use ./anovaProportion.png>
-Package pdftex.def Info: ./anovaProportion.png  used on input line 160.
-(pdftex.def)             Requested size: 585.18481pt x 154.57712pt.
-<./variableProportion.png, id=53, 2106.87125pt x 2106.87125pt>
-File: ./variableProportion.png Graphic file (type png)
-<use ./variableProportion.png>
-Package pdftex.def Info: ./variableProportion.png  used on input line 166.
-(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
- [6pdfTeX warning (ext4): destination with the same identifier (name{table.4}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.169 
-      pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.169 
-       <./anovaProportion.png>]
-<./teaVariableProportion.png, id=61, 2106.87125pt x 2106.87125pt>
-File: ./teaVariableProportion.png Graphic file (type png)
-<use ./teaVariableProportion.png>
-Package pdftex.def Info: ./teaVariableProportion.png  used on input line 187.
-(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
- [7pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.190 
-      pdfTeX warning (ext4): destination with the same identifier (name{table.5}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.190 
-       <./variableProportion.png>]
-<./conditionVariableProportion.png, id=70, 2106.87125pt x 2106.87125pt>
-File: ./conditionVariableProportion.png Graphic file (type png)
-<use ./conditionVariableProportion.png>
-Package pdftex.def Info: ./conditionVariableProportion.png  used on input line 216.
-(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
- [8pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.219 
-       <./teaVariableProportion.png>]
-Overfull \vbox (56.18456pt too high) has occurred while \output is active []
-
- [9pdfTeX warning (ext4): destination with the same identifier (name{table.6}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.219 
-      pdfTeX warning (ext4): destination with the same identifier (name{figure.9}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.219 
-       <./conditionVariableProportion.png>]
-<./conditionVariableTEAProportion.png, id=84, 2106.87125pt x 2106.87125pt>
-File: ./conditionVariableTEAProportion.png Graphic file (type png)
-<use ./conditionVariableTEAProportion.png>
-Package pdftex.def Info: ./conditionVariableTEAProportion.png  used on input line 241.
-(pdftex.def)             Requested size: 421.36679pt x 421.36679pt.
- [10pdfTeX warning (ext4): destination with the same identifier (name{table.7}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.244 
-      ] [11pdfTeX warning (ext4): destination with the same identifier (name{figure.10}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.279 \end{document}
-                     <./conditionVariableTEAProportion.png>] [12pdfTeX warning (ext4): destination with the same identifier (name{table.8}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.279 \end{document}
-                    ] (./report13.aux)
-Package rerunfilecheck Info: File `report13.out' has not changed.
-(rerunfilecheck)             Checksum: 2F3E823C8A2B6C0FF0E349F23851FB33;106.
+l.194 \end{document}
+                     <./teaConditionProportion.png>] [9] (./report16.aux)
+Package rerunfilecheck Info: File `report16.out' has not changed.
+(rerunfilecheck)             Checksum: EE507E29A4A7A366A7B49F434BBA31CA;323.
  ) 
 Here is how much of TeX's memory you used:
- 8378 strings out of 478994
- 125353 string characters out of 5858184
- 435716 words of memory out of 5000000
- 25732 multiletter control sequences out of 15000+600000
+ 8346 strings out of 478994
+ 124428 string characters out of 5858184
+ 434714 words of memory out of 5000000
+ 25716 multiletter control sequences out of 15000+600000
  407070 words of font info for 39 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 71i,7n,74p,239b,326s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,7n,74p,214b,355s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on report13.pdf (12 pages, 909839 bytes).
+Output written on report16.pdf (9 pages, 570239 bytes).
 PDF statistics:
- 125 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
- 32 named destinations out of 1000 (max. 500000)
- 59 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 100 PDF objects out of 1000 (max. 8388607)
+ 72 compressed objects within 1 object stream
+ 20 named destinations out of 1000 (max. 500000)
+ 55 words of extra memory for PDF output out of 10000 (max. 10000000)
 

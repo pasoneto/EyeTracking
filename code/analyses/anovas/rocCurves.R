@@ -1,7 +1,7 @@
 source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library(pROC)
-library(caret)
+ibrary(caret)
 library(pROC)
 library(data.table)
 library(dplyr)
@@ -9,25 +9,6 @@ library(ggridges)
 library(xtable)
 
 otherTEA = "TD"
-
-#Mantem AOI, colapsa por condição, soma por variable
-rocPlotter = function(df, AOI, condition, plot = FALSE){
-  runCondition = is.character(condition)
-  if(runCondition){
-    df = df %>%
-      group_by(variable, Recording.name, tea, condition) %>%
-      summarise(value = mean(value)) %>%
-      filter(variable == AOI) %>%
-      filter(condition == condition)
-
-  } else{
-    df = df %>%
-      group_by(variable, Recording.name, tea) %>%
-      summarise(value = mean(value)) %>%
-      filter(variable == AOI)
-  }
-  return(roc(df$tea, df$value, plot = plot))
-}
 
 #Alternancia Non matched
 df = fread("/Users/pdealcan/Documents/github/dataSabara/masterFile/masterFile.csv")
@@ -47,15 +28,17 @@ df = df %>%
 
 conditionSet = FALSE
 plotSet = FALSE
-nonMatchedA = rocPlotter(df, "fundoProportion", conditionSet, plotSet)
+nonMatchedA = rocPlotter(df, "fundoProportion", conditionSet, TRUE)
 nonMatchedB = rocPlotter(df, "targetProportion", conditionSet, plotSet)
 nonMatchedC = rocPlotter(df, "distractorProportion", conditionSet, plotSet)
 nonMatchedD = rocPlotter(df, "rostoProportion", conditionSet, plotSet)
 
 aois = c("fundoProportion", "targetProportion", "distractorProportion", "rostoProportion")
+k = "rostoProportion"
 for(k in aois){
   dfFinal = decisionVisualizer(df, k)
   graphF = dfFinal %>%
+    melt(id.vars = c("threshs", "direction")) %>%
     ggplot(aes(x = threshs, y = value, color = variable)) +
       geom_line() +
       labs(title=paste(k, unique(dfFinal$direction)))
@@ -192,6 +175,7 @@ ggroc(list(fundo = matchedA, target = matchedB, distractor = matchedC, rosto = m
 ggsave("/Users/pdealcan/Documents/github/sabara/reports/2023/report11/alternanciaMatched.jpg")
 
 aois = c("rostoTarget", "targetRosto", "distractorRosto", "rostoDistractor")
+k = "targetRosto"
 for(k in aois){
   dfFinal = decisionVisualizer(df, k)
   graphF = dfFinal %>%

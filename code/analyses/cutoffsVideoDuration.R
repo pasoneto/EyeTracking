@@ -3,8 +3,10 @@ source("/Users/pdealcan/Documents/github/sabara/code/utils.R")
 library("stringr")
 library("readxl")
 library(xtable)
-directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipant/"
+#directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipant/"
+directory = "/Users/pdealcan/Documents/github/dataSabara/processedParticipantPost/"
 durations = fread("/Users/pdealcan/Documents/github/sabara/code/verificacoes/accuracy/timeAll.csv") 
+
 
 #Filtering out outliers by video duration. Non filtered is 431, filtered is 426.
 filterOutDurations = durations %>%

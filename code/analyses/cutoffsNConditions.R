@@ -5,7 +5,7 @@ library(dplyr)
 
 #Cutoffs
 source("/Users/pdealcan/Documents/github/sabara/code/analyses/cutoffsVideoDuration.R")
-setwd("/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINAL")
+setwd("/Users/pdealcan/Documents/github/dataSabara/processedParticipantFINALPost")
 
 files = list.files()
 file_list = lapply(files, function(i){

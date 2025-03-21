@@ -511,6 +511,26 @@ computeAlternancias = function(df){
 
 rescale <- function(x){(x-min(x))/(max(x)-min(x))}
 
+#ROC plotter
+#Mantem AOI, colapsa por condição, soma por variable
+rocPlotter = function(df, AOI, condition, plot = FALSE){
+  runCondition = is.character(condition)
+  if(runCondition){
+    df = df %>%
+      group_by(variable, Recording.name, tea, condition) %>%
+      summarise(value = mean(value)) %>%
+      filter(variable == AOI) %>%
+      filter(condition == condition)
+
+  } else{
+    df = df %>%
+      group_by(variable, Recording.name, tea) %>%
+      summarise(value = mean(value)) %>%
+      filter(variable == AOI)
+  }
+  return(roc(df$tea, df$value, plot = plot))
+}
+
 #Functions to help choose best thresholds
 threshClassifier = function(x, rocObj, thresh){
   if(rocObj$direction == ">"){
@@ -552,7 +572,7 @@ finalClassifier = function(data, AOI, thresh){
   return(a)
 }
 
-decisionVisualizer = function(df, AOI){
+decisionVisualizer = function(df){
   rocObj = rocPlotter(df, AOI, FALSE, FALSE)
   accs = c()
   senss = c()
@@ -569,7 +589,7 @@ decisionVisualizer = function(df, AOI){
                        accs = accs,
                        direction = rocObj$direction
   )
-  dfFinal = dfFinal %>% melt(id.vars = c("threshs", "direction"))
+  dfFinal = dfFinal
   return(dfFinal)
 }
 
